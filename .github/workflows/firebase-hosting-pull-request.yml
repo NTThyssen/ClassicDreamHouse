@@ -9,8 +9,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '12.x'
+      - uses: subosito/flutter-action@v1
+        with:
+          flutter-version: '2.0.1'
         working-directory: ./classic_dream_house_web
-        run: flutter build web
+        run: flutter pub get && flutter test && flutter build web
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
