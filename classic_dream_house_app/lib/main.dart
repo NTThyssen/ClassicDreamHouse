@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:classic_cream_couse/theme.dart';
 void main() {
   runApp(MyApp());
 }
@@ -71,6 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
+        backgroundColor: appTheme.primaryColor,
         title: Text(widget.title),
       ),
       body: Center(
