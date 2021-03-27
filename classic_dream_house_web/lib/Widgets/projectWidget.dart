@@ -1,4 +1,4 @@
-import 'package:classic_dream_house_web/theme.dart';
+import 'package:classic_cream_couse/theme.dart';
 import 'package:flutter/material.dart';
 
 class ProjectWidget extends StatefulWidget {

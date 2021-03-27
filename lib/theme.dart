@@ -23,15 +23,15 @@ ThemeData appTheme = ThemeData(
   ),
   scaffoldBackgroundColor: white,
   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
- /* textTheme: GoogleFonts.latoTextTheme().copyWith(
+  /* textTheme: GoogleFonts.latoTextTheme().copyWith(
     button: GoogleFonts.lato().copyWith(
       color: white,
       fontSize: 16,
       fontWeight: FontWeight.w700,
     ),*/
 
-    /* Title */
-   /* headline1: GoogleFonts.lato().copyWith(
+  /* Title */
+  /* headline1: GoogleFonts.lato().copyWith(
       fontSize: 30,
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,

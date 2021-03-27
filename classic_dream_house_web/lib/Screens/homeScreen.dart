@@ -1,5 +1,5 @@
 import 'package:classic_dream_house_web/Widgets/projectWidget.dart';
-import 'package:classic_dream_house_web/theme.dart';
+import 'package:classic_cream_couse/theme.dart';
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 
@@ -10,9 +10,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int pageIndex = 0;
-  PageController pageController = PageController(initialPage:0);
+  PageController pageController = PageController(initialPage:0, viewportFraction: 0.99);
 
+  _onPageViewChange(int page) {
+    int previousPage = page;
+    if(page == 0) pageIndex=0;
+    else pageIndex = page;
+    setState(() {
 
+    });
+  }
 
 
 
@@ -50,9 +57,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Wrap(
                   spacing: 50,
                   children: [
-                    TextButton(child:Text("Hjem"),  onPressed: () {  },),
-                    TextButton(child:Text("Oversigt"),  onPressed: () {  },),
-                    TextButton(child:Text("Indstillinger"),
+                    TextButton(child:Text("Hjem", style: TextStyle(color: appTheme.splashColor)),  onPressed: () {  },),
+                    TextButton(child:Text("Oversigt", style: TextStyle(color: appTheme.splashColor)),  onPressed: () {  },),
+                    TextButton(child:Text("Indstillinger", style: TextStyle(color: appTheme.splashColor)),
                         onPressed: () {  },)
                   ],
                 ),
@@ -77,6 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     PageView(
                       physics: AlwaysScrollableScrollPhysics() ,
                       controller: pageController,
+                      onPageChanged: _onPageViewChange,
                     children: [
                       Scrollbar(
                         controller: ScrollController(),
@@ -139,16 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: MaterialButton(
                       height: 50,
                         minWidth: 10,
-                        color: appTheme.primaryColor,
+                        color: appTheme.primaryColor ,
                         shape: CircleBorder(),
                         child: Icon(Icons.arrow_forward_ios_outlined, color: Colors.white), onPressed: (){
                         pageController.nextPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
-                        pageIndex++;
-                        if(pageIndex > 0){
-                          setState(() {
-
-                          });
-                        }
                       }
                         )
                     ),
@@ -162,12 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
                             shape: CircleBorder(),
                             child: Icon(Icons.arrow_back_ios_outlined, color: Colors.white), onPressed: (){
                               pageController.previousPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
-                              pageIndex--;
-                              if(pageIndex == 0){
-                                setState(() {
-
-                                });
-                              }
                         }
                         )
                     )
