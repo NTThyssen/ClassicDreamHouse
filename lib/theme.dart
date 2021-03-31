@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:google_fonts/google_fonts.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Theme
 ThemeData appTheme = ThemeData(
@@ -23,15 +23,15 @@ ThemeData appTheme = ThemeData(
   ),
   scaffoldBackgroundColor: white,
   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-  /* textTheme: GoogleFonts.latoTextTheme().copyWith(
+   textTheme: GoogleFonts.latoTextTheme().copyWith(
     button: GoogleFonts.lato().copyWith(
       color: white,
-      fontSize: 16,
+      fontSize: 12,
       fontWeight: FontWeight.w700,
-    ),*/
+    ),
 
   /* Title */
-  /* headline1: GoogleFonts.lato().copyWith(
+  headline1: GoogleFonts.lato().copyWith(
       fontSize: 30,
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
@@ -47,16 +47,16 @@ ThemeData appTheme = ThemeData(
     /* Header */
     headline3: GoogleFonts.lato().copyWith(
       fontSize: 17,
-      fontWeight: FontWeight.w700,
+      fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
     ),
 
     /* Body text */
     bodyText1: GoogleFonts.lato().copyWith(
-      fontSize: 17,
+      fontSize: 14,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
-      height: 1.5,
+      height: 1.0,
     ),
 
     /* Input field placeholder */
@@ -88,14 +88,14 @@ ThemeData appTheme = ThemeData(
       fontWeight: FontWeight.w300,
       fontStyle: FontStyle.normal,
     ),
-  ),*/
+  ),
 );
 
 TextStyle titleTextStyle = appTheme.textTheme.headline1.copyWith(color: white);
 TextStyle subtitleTextStyle =
 appTheme.textTheme.headline2.copyWith(color: white);
 TextStyle headerTextStyle = appTheme.textTheme.headline3.copyWith(color: white);
-TextStyle bodyTextStyle = appTheme.textTheme.bodyText1.copyWith(color: white);
+TextStyle bodyTextStyle = appTheme.textTheme.bodyText1.copyWith(color: appTheme.primaryColor);
 TextStyle inputFieldTextStyle =
 appTheme.textTheme.bodyText2.copyWith(color: lightGrey);
 TextStyle cardTitleTextStyle =

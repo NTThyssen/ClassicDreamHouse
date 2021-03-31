@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "48442117812",
+    "project_id": "classic-dream-house",
+    "storage_bucket": "classic-dream-house.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:48442117812:android:eb5c9fd500524ce50c51e1",
+        "android_client_info": {
+          "package_name": "com.example.classic_dream_house_web"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "48442117812-2r7ar9elkjs5k6ri51oleqqg7ufbulrd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9S5gapany1OITZ9VGu--lwUtE77LT8kU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "48442117812-2r7ar9elkjs5k6ri51oleqqg7ufbulrd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

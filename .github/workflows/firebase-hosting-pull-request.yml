@@ -8,19 +8,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build
       - uses: actions/setup-java@v1
         with:
           java-version: '12.x'
       - uses: subosito/flutter-action@v1
         with:
           flutter-version: '2.0.1'
-        working-directory: ./classic_dream_house_web
-        run: flutter pub get && flutter test && flutter build web
+      - name: Build
+        run: cd classic_dream_house_web && flutter pub get && flutter build web
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_CLASSIC_DREAM_HOUSE }}'
           projectId: classic-dream-house
-        env:
-          FIREBASE_CLI_PREVIEWS: hostingchannels
+          channelId: live
