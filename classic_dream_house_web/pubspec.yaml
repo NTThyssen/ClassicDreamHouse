@@ -31,11 +31,14 @@ dependencies:
   sticky_headers:  ^0.1.8
   path_provider: ^1.6.24
   advance_pdf_viewer: ^1.2.2
+  json_annotation: 3.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
   classic_cream_couse:
     path: ../../classic_cream_couse
+  build_runner: ^1.11.2
+  json_serializable: 3.5.1
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 

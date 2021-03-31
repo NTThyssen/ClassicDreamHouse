@@ -72,11 +72,11 @@ class _ProjectWidgetState extends State<ProjectWidget> {
                     children: [
                       Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text("Navn: Hans Hansen", style: TextStyle(color: appTheme.primaryColor),),
+                      child: Text("Navn: Hans Hansen", style: bodyTextStyle,),
                     ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text("Budget : 4 Mil", style: TextStyle(color: appTheme.primaryColor),),
+                        child: Text("Budget : 4 Mil", style: bodyTextStyle,),
                       ),
                     ],
                   ),
@@ -86,11 +86,11 @@ class _ProjectWidgetState extends State<ProjectWidget> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text("Addresse: Kollegiebakken 9 ", style: TextStyle(color: appTheme.primaryColor),),
+                        child: Text("Addresse: Kollegiebakken 9 ",style:bodyTextStyle,),
                       ),
                       Padding(
                         padding: const EdgeInsets.all(16.0),
-                        child: Text("Igang med: Fundament", style: TextStyle(color: appTheme.primaryColor),),
+                        child: Text("Igang med: Fundament", style:bodyTextStyle,),
                       ),
                   ],
                   ),

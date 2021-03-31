@@ -32,12 +32,10 @@ class _LoginPageState extends State<LoginPage> {
                 child: TextField(
                   autofocus: true,
                   decoration: InputDecoration(
-
                     enabled: true,
                     border: OutlineInputBorder(),
                     labelText: "Bruger-ID",
                     labelStyle: TextStyle(
-
                       fontSize: 22
                     )
                   ),
