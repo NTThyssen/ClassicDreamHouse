@@ -31,6 +31,9 @@ dependencies:
   cupertino_icons: ^1.0.2
   timeline_tile: ^2.0.0
   advance_pdf_viewer: ^1.2.2
+  cloud_firestore: ^0.14.0+2
+  firebase_core: ^0.5.0
+  provider: ^4.0.0
 
 dev_dependencies:
   flutter_test:

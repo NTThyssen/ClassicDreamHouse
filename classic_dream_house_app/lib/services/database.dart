@@ -21,6 +21,13 @@ class DatabaseService {
 
   }
 
+  Future<BuildingProject> getProject(String projectUuid) async {
+
+   DocumentSnapshot doc = await projectCollection.doc(projectUuid).get();
+   return BuildingProject.fromJson(doc.data());
+
+  }
+
 
   Future updateProject(BuildingProject buildingProject) async {
 

@@ -1,14 +1,13 @@
 
-
-import 'package:classic_dream_house_web/Model/customer.dart';
+import 'package:classic_cream_couse/Model/customer.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'buildingProject.g.dart';
 
-@JsonSerializable()
+@JsonSerializable(explicitToJson: true)
 class BuildingProject {
-  final String projectId;
+  final String projectuuId;
   final Customer customer;
-  BuildingProject(this.customer, this.projectId );
+  BuildingProject({this.customer, this.projectuuId} );
 
 
   factory BuildingProject.fromJson(Map<String, dynamic> json) => _$BuildingProjectFromJson(json);
