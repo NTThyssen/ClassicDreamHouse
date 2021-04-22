@@ -1,11 +1,9 @@
-import 'dart:convert';
-
 import 'package:classic_cream_couse/Model/buildingProject.dart';
-import 'package:classic_cream_couse/Model/customer.dart';
 import 'package:classic_cream_couse/theme.dart';
-import 'package:classic_dream_house_app/screens/documentsPage.dart';
+import 'package:classic_dream_house_app/navigator/route_manager.dart';
+import 'package:classic_dream_house_app/screens/mainTabbarPage.dart';
 import 'package:classic_dream_house_app/services/database.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:classic_dream_house_app/services/sharedPreferences.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -17,7 +15,7 @@ class _LoginPageState extends State<LoginPage> {
   String input;
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<BuildingProject>(
+    return SharedPref().read("id") == null ? FutureBuilder<BuildingProject>(
       future: DatabaseService().getProject("SAXq4F5Hwh6XOIchSct6"),
       builder: (context, snapshot) {
         return Container(
@@ -48,7 +46,6 @@ class _LoginPageState extends State<LoginPage> {
                       decoration: InputDecoration(
                         enabled: true,
                         border: OutlineInputBorder(),
-                        helperText: "SAXq4F5Hwh6XOIchSct6",
                         labelText: "Bruger-ID",
                         labelStyle: TextStyle(
                           fontSize: 22
@@ -66,9 +63,11 @@ class _LoginPageState extends State<LoginPage> {
                           )
                       ),
                       child: Text("Login"),
-
                       onPressed: () async {
                           print(snapshot.data.customer.name);
+                          await SharedPref().save("idd", snapshot.data.projectuuId ?? "saved id");
+                          print(await SharedPref().read("idd"));
+                          Navigator.pushReplacementNamed(context, MainTabbarPageRoute);
                       },
                     ),
                   ],
@@ -78,6 +77,6 @@ class _LoginPageState extends State<LoginPage> {
           ),
         );
       }
-    );
+    ) :  MainTabbarPage();
   }
 }

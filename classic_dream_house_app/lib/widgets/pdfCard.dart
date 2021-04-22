@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:classic_dream_house_app/navigator/route_manager.dart' as router;
 class PdfCard extends StatefulWidget {
+  final String pdfTitle;
+  PdfCard({this.pdfTitle});
   @override
   _PdfCardState createState() => _PdfCardState();
 }
@@ -34,7 +36,7 @@ class _PdfCardState extends State<PdfCard> {
           child: Card(
               child: Column(
                 children: [
-                  Text("Kontrakt", style: TextStyle(color: appTheme.primaryColor),),
+                  Text(widget.pdfTitle, style: TextStyle(color: appTheme.primaryColor),),
                   SizedBox(
                     height: 10,
                   ),

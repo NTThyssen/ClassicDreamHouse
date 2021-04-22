@@ -9,6 +9,12 @@ class TimelinePage extends StatefulWidget {
 class _TimelinePageState extends State<TimelinePage> {
   @override
   Widget build(BuildContext context) {
-    return Container(child: Timeline(),);
+    return Container(child: Column(
+      children: [
+        Timeline(title: "Fundament", isComplete: true,),
+        Timeline(title: "Tag", isActive: true, isLast: false,),
+        Timeline(title: "Vinduer", isActive: false, isLast: true, notStarted: true,),
+      ],
+    ),);
   }
 }

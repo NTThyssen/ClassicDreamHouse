@@ -449,7 +449,7 @@ packages:
     source: hosted
     version: "0.2.19"
   timeline_tile:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: timeline_tile
       url: "https://pub.dartlang.org"

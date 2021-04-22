@@ -18,6 +18,7 @@ class _PdfViewPageState extends State<PdfViewPage> {
     super.initState();
     loadDocument();
   }
+
   @override
   Widget build(BuildContext context) {
     return Container(

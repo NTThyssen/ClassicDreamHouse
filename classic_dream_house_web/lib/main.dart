@@ -1,5 +1,6 @@
 import 'package:classic_dream_house_web/Screens/createProjectPage.dart';
 import 'package:classic_dream_house_web/Screens/homeScreen.dart';
+import 'package:classic_dream_house_web/Screens/loginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:classic_cream_couse/theme.dart';
 void main() {
@@ -17,8 +18,7 @@ class MyApp extends StatelessWidget {
         CreateProjectPage.route: (context) => CreateProjectPage(),
       },
       theme: appTheme,
-      title: 'Flutter Demo',
-      home: HomeScreen(),
+      home: LoginPage(),
     );
   }
 }

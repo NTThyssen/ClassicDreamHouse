@@ -19,7 +19,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           return PdfViewPage();
         },
       );
-
+    case MainTabbarPageRoute:
+      return MaterialPageRoute(
+        builder: (context) {
+          return MainTabbarPage();
+        },
+      );
     default:
       return MaterialPageRoute(
         builder: (context) => MainTabbarPage(),
@@ -27,5 +32,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   }
 }
 
+const String MainTabbarPageRoute = "mainPage";
 const String PdfViewRoute = "pdfView";
 const String RootRoute = "root";

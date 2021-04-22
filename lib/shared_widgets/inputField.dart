@@ -3,7 +3,8 @@ import '../theme.dart';
 
 class InputField extends StatefulWidget {
   final TextEditingController controller;
-  InputField(this.controller);
+  final String labelText;
+  InputField({this.controller, this.labelText});
 
   @override
   _InputFieldState createState() => _InputFieldState();
@@ -32,7 +33,7 @@ class _InputFieldState extends State<InputField> {
             enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.greenAccent, width: 2)),
             enabled: true,
             border: OutlineInputBorder(),
-            labelText: "Bruger-ID",
+            labelText: widget.labelText,
             labelStyle: bodyTextStyle.copyWith(fontSize: 18)
         ),
       ),
