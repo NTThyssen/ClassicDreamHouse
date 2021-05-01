@@ -1,4 +1,5 @@
 import 'package:classic_cream_couse/theme.dart';
+import 'package:classic_dream_house_web/Screens/createProjectPage.dart';
 import 'package:classic_dream_house_web/Widgets/timelineTitleCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,14 +8,13 @@ import 'package:overlay_container/overlay_container.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 import 'package:classic_cream_couse/shared_widgets/inputField.dart';
 import 'package:circular_menu/circular_menu.dart';
-class TimelineInputWidget extends StatefulWidget {
-  bool isComplete;
-  bool isActive;
-  final String title;
-  final bool isLast;
-  bool notStarted;
+import 'package:classic_cream_couse/Model/status.dart';
+import 'package:classic_cream_couse/Model/timelineData.dart';
 
-  TimelineInputWidget({this.isActive, this.title, this.isLast, this.notStarted, this.isComplete});
+class TimelineInputWidget extends StatefulWidget {
+  TimelineData timelineData;
+  final bool isLast;
+  TimelineInputWidget({this.timelineData, this.isLast});
   @override
   _TimelineInputWidgetState createState() => _TimelineInputWidgetState();
 }
@@ -66,9 +66,7 @@ class _TimelineInputWidgetState extends State<TimelineInputWidget> {
                     Expanded(
                       child: RawMaterialButton(
                       onPressed:() {
-                        widget.isActive = false;
-                        widget.isComplete = false;
-                        widget.notStarted = true;
+                        widget.timelineData.status = Status.notStarted;
                         _toggleDropdown();
                       },
                       elevation: 2.0,
@@ -82,10 +80,8 @@ class _TimelineInputWidgetState extends State<TimelineInputWidget> {
                     Expanded(
                       child: RawMaterialButton(
                         onPressed: () {
-                          widget.notStarted = false;
-                          widget.isActive = false;
-                          widget.isComplete = true;
-                          _toggleDropdown();
+                            widget.timelineData.status = Status.complete;
+                            _toggleDropdown();
                         },
                         elevation: 2.0,
                         fillColor: Colors.white,
@@ -97,9 +93,7 @@ class _TimelineInputWidgetState extends State<TimelineInputWidget> {
                     Expanded(
                       child: RawMaterialButton(
                         onPressed: () {
-                          widget.notStarted = false;
-                          widget.isComplete = false;
-                          widget.isActive = true;
+                          widget.timelineData.status = Status.started;
                           _toggleDropdown();
                         },
                         elevation: 2.0,
@@ -128,7 +122,7 @@ class _TimelineInputWidgetState extends State<TimelineInputWidget> {
             height: 36,
             width: 36,
             drawGap: true,
-            indicator: widget.isComplete ?? false ? RawMaterialButton(
+            indicator: widget.timelineData.status == Status.complete ? RawMaterialButton(
               onPressed: _toggleDropdown,
               elevation: 2.0,
               fillColor: Colors.white,
@@ -139,7 +133,7 @@ class _TimelineInputWidgetState extends State<TimelineInputWidget> {
               ),
               shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(30.0), side: BorderSide(color: appTheme.primaryColor)),
 
-            ) : widget.isActive ?? false ? GestureDetector(
+            ) : widget.timelineData.status == Status.started ? GestureDetector(
               onTap: _toggleDropdown,
               child: Container(
                 decoration: BoxDecoration(
@@ -155,13 +149,16 @@ class _TimelineInputWidgetState extends State<TimelineInputWidget> {
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: CircularProgressIndicator(
-                    valueColor: AlwaysStoppedAnimation<Color>(appTheme.primaryColor),
-                    backgroundColor: appTheme.backgroundColor,
+                  child: RawMaterialButton(
+                    onPressed: _toggleDropdown,
+                    child: CircularProgressIndicator(
+                      valueColor: AlwaysStoppedAnimation<Color>(appTheme.primaryColor),
+                      backgroundColor: appTheme.backgroundColor,
+                    ),
                   ),
                 ),
               ),
-            ) : widget.notStarted ?? true ? Container(
+            ) : widget.timelineData.status == Status.notStarted ? Container(
                 decoration: BoxDecoration(
                     color: appTheme.backgroundColor,
                     shape: BoxShape.circle
@@ -185,7 +182,7 @@ class _TimelineInputWidgetState extends State<TimelineInputWidget> {
           endChild: Padding(
             padding: const EdgeInsets.fromLTRB(0, 20, 0, 20),
             child: Container(
-                child: TimelineTitleCard(widget.title)
+                child: TimelineTitleCard(widget.timelineData)
             ),
           ),
         ),

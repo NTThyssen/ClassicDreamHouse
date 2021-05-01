@@ -5,12 +5,15 @@ part 'customer.g.dart';
 
 class Customer {
   final String name;
+  final String partnerName;
+  final String mobile;
   final String email;
-  final String address;
+  final String livingAddress;
+  final String buildingAddress;
 
 
 
-  Customer(this.address, this.email, this.name);
+  Customer({this.livingAddress, this.email, this.name, this.buildingAddress, this.partnerName, this.mobile});
 
   factory Customer.fromJson(Map<String, dynamic> json) => _$CustomerFromJson(json);
 

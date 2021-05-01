@@ -24,7 +24,9 @@ class DatabaseService {
   Future<BuildingProject> getProject(String projectUuid) async {
 
    DocumentSnapshot doc = await projectCollection.doc(projectUuid).get();
-   return BuildingProject.fromJson(doc.data());
+   BuildingProject buildingProject = BuildingProject.fromJson(doc.data());
+   buildingProject.projectuuId = doc.id;
+   return buildingProject;
 
   }
 

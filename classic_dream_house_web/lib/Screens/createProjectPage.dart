@@ -18,8 +18,11 @@ import 'package:classic_cream_couse/shared_widgets/inputField.dart';
 import 'package:classic_cream_couse/theme.dart';
 import 'package:classic_cream_couse/shared_widgets/mainButtonType.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:classic_cream_couse/Model/status.dart';
 import 'package:firebase/firebase.dart' as fb;
+import 'package:classic_cream_couse/Model/timelineData.dart';
 import 'package:path/path.dart' as path;
+
 class CreateProjectPage extends StatefulWidget {
   static const String route = '/createProject';
 
@@ -30,18 +33,19 @@ class CreateProjectPage extends StatefulWidget {
 class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
 
   List<dynamic> timelineElements = [];
-
+  List<TimelineData> timelineDataList = [];
   addToTimeline(Widget widget){
     timelineElements.length == 0 ? timelineElements.add(widget) : timelineElements.insert(timelineElements.length-1 , Center(child: widget));
 
   }
 
- TextEditingController textEditingController1 = TextEditingController();
- TextEditingController textEditingController2 = TextEditingController();
- TextEditingController textEditingController3 = TextEditingController();
- TextEditingController textEditingController4 = TextEditingController();
- TextEditingController textEditingController5 = TextEditingController();
- TextEditingController textEditingController6 = TextEditingController();
+ TextEditingController nameController= TextEditingController();
+ TextEditingController partnerNameController = TextEditingController();
+ TextEditingController mailController = TextEditingController();
+ TextEditingController mobileController = TextEditingController();
+ TextEditingController buildingAddressController = TextEditingController();
+ TextEditingController livingAddressController = TextEditingController();
+  TextEditingController timelineInitController = TextEditingController();
  final _formKey = GlobalKey<FormState>();
  @override
   Widget appBar() {
@@ -60,7 +64,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
         child: IconButton(
           icon: Icon(Icons.add_circle, color: appTheme.primaryColor, size: 40,),
           onPressed: () {
-            textEditingController6.text="";
+            timelineInitController.text="";
             showDialog(
                 context: context,
                 builder: (BuildContext context) {
@@ -88,15 +92,16 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                             children: <Widget>[
                               Padding(
                                 padding: EdgeInsets.all(8.0),
-                                child: InputField(labelText: "Category",controller: textEditingController6,),
+                                child: InputField(labelText: "Category",controller: timelineInitController,),
                               ),
                               Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: MainButtonType(buttonText:"Tilføj til tidslinje",
                                     onClick: () {
-
                                       setState(() {
-                                        addToTimeline( TimelineInputWidget(title: textEditingController6.text,notStarted: true, isActive: false, isComplete: false,));
+                                        TimelineData temp = TimelineData(title: timelineInitController.text, status: Status.notStarted);
+                                        timelineDataList.add(temp);
+                                        addToTimeline( TimelineInputWidget(timelineData: temp));
                                       });
                                       Navigator.of(context).pop();
                                     },
@@ -191,18 +196,24 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Expanded(
-                      child: Column(
+                      child: Row(
                         children: [
-                          Center(child: Text("Tilføj Elementer til tidslinje", style: headerTextStyle.copyWith(color: appTheme.primaryColor),)),
                           Expanded(
-                            child: ListView.builder(
-                              itemCount: timelineElements.length,
-                              itemBuilder: (_, index) => timelineElements[index]
+                            child: Column(
+                              children: [
+                                Center(child: Text("Tilføj Elementer til tidslinje", style: headerTextStyle.copyWith(color: appTheme.primaryColor),)),
+                                Expanded(
+                                  child: ListView.builder(
+                                    itemCount: timelineElements.length,
+                                    itemBuilder: (_, index) => timelineElements[index]
+                                  ),
+                                ),
+
+                                SizedBox(height: 60,)
+
+                              ],
                             ),
                           ),
-
-                          SizedBox(height: 60,)
-
                         ],
                       ),
                     ),
@@ -225,24 +236,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                               child: Icon(Icons.image, color: appTheme.primaryColor, size: 80,),
                             ),
                           ),
-                          InputField(controller: textEditingController2, labelText: "Mobil",),
-                          InputField(controller: textEditingController3, labelText: "email",),
-                          ElevatedButton(
-                            style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
-                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    )
-                                )
-                            ),
-                            child: Text("Opret Bygge Projekt", style: headerTextStyle,),
-                            onPressed: () {
-                             DatabaseService().createProject(
-                                 BuildingProject(customer:Customer(textEditingController1.text, textEditingController2.text, textEditingController3.text), )
-                             );
-                            },
-                          ),
                         ],),
                     ),
                     Expanded(
@@ -250,12 +243,72 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                         padding: const EdgeInsets.fromLTRB(0, 0, 150, 0),
                         child: Column(
                           children: [
-                            DocumentUploadWidget()
+                            DocumentUploadWidget(),
                           ],
                         ),
                       ),
                     ),
                   ],
+                ),
+              ),
+              Expanded(
+                  child: Row(
+                      children: [
+                        Expanded(child: SizedBox(width: 50,)),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              InputField(controller: nameController, labelText: "Navn",),
+                              InputField(controller: partnerNameController, labelText: "Partner Navn",),
+                              InputField(controller: mailController, labelText: "Email",),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              InputField(controller: mobileController, labelText: "Mobil",),
+                              InputField(controller: buildingAddressController, labelText: "Bygge Adresse",),
+                              InputField(controller: livingAddressController, labelText: "Beboelses Adresse",),
+                            ],
+                          ),
+                        )
+                      ],
+                  )
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+                child: ConstrainedBox(
+                  constraints: BoxConstraints.tightFor(width: 300, height: 50),
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            )
+                        )
+                    ),
+                    child: Text("Opret Bygge Projekt", style: headerTextStyle,),
+                    onPressed: () {
+
+                     DatabaseService().createProject(
+                         BuildingProject(
+                           timeLineData: timelineDataList,
+                             customer: Customer(
+                           name:nameController.text,
+                           partnerName: partnerNameController.text,
+                           email: mailController.text,
+                           mobile: mobileController.text,
+                           buildingAddress: buildingAddressController.text,
+                           livingAddress: livingAddressController.text,)
+
+                         ),
+                      );
+                    },
+                  ),
                 ),
               ),
             ],

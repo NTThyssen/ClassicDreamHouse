@@ -5,15 +5,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:classic_cream_couse/shared_widgets/mainButtonType.dart';
 import 'package:classic_cream_couse/shared_widgets/inputField.dart';
+import 'package:classic_cream_couse/Model/timelineData.dart';
 class TimelineTitleCard extends StatefulWidget {
-  final String title;
+  final TimelineData title;
   TimelineTitleCard(this.title);
   @override
   _TimelineTitleCardState createState() => _TimelineTitleCardState();
 }
 
 class _TimelineTitleCardState extends State<TimelineTitleCard> {
-  TextEditingController textEditingController = TextEditingController(text: "");
+  TextEditingController textEditingController = TextEditingController(text:"");
   bool isEnable = false;
 
   void _toggleEdit() {
@@ -55,7 +56,10 @@ class _TimelineTitleCardState extends State<TimelineTitleCard> {
                       color: appTheme.primaryColor,
                       fontSize: 18
                     ),
-                    initialValue: widget.title,
+                    onChanged: (input){
+                      widget.title.title = input;
+                    },
+                    initialValue: widget.title.title,
                     enabled: isEnable,
                   ),
                   ),
