@@ -3,14 +3,14 @@ import 'package:classic_dream_house_app/widgets/timelineTitleCard.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:timeline_tile/timeline_tile.dart';
+import 'package:classic_cream_couse/Model/timelineData.dart';
+import 'package:classic_cream_couse/Model/status.dart';
 class Timeline extends StatefulWidget {
-  final bool isComplete;
-  final bool isActive;
+  final TimelineData timelineData;
   final String title;
   final bool isLast;
-  final bool notStarted;
 
-  Timeline({this.isActive, this.title, this.isLast, this.notStarted, this.isComplete});
+  Timeline({this.timelineData, this.title, this.isLast,});
   @override
   _TimelineState createState() => _TimelineState();
 }
@@ -32,13 +32,13 @@ class _TimelineState extends State<Timeline> {
             height: 36,
             width: 36,
             drawGap: true,
-            indicator: widget.isComplete ?? false ? Container(
+            indicator: widget.timelineData.status == Status.complete ? Container(
               decoration: BoxDecoration(
                   color: appTheme.backgroundColor,
                   shape: BoxShape.circle
               ),
               child: Icon(Icons.check_circle_outline, color: appTheme.primaryColor, size: 28,),
-            ) : widget.isActive ?? false ? Container(
+            ) : widget.timelineData.status == Status.started ? Container(
                 decoration: BoxDecoration(
                     color: appTheme.backgroundColor,
                     shape: BoxShape.circle
@@ -50,7 +50,7 @@ class _TimelineState extends State<Timeline> {
                     backgroundColor: appTheme.backgroundColor,
                   ),
                 ),
-          ) : widget.notStarted ?? false ? Container(
+          ) : widget.timelineData.status == Status.notStarted ? Container(
               decoration: BoxDecoration(
                   color: appTheme.backgroundColor,
                   shape: BoxShape.circle

@@ -56,12 +56,9 @@ class _MainTabbarPageState extends State<MainTabbarPage> with TickerProviderStat
                     )
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(0, 70  , 0, 0),
-                  child: TabBarView(
-                    controller: tabController,
-                    children: [TimelinePage(), DocumentsPage()],
-                  ),
+                TabBarView(
+                  controller: tabController,
+                  children: [TimelinePage(), DocumentsPage()],
                 )
               ]
           )

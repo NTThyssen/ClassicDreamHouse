@@ -1,6 +1,6 @@
 import 'package:classic_cream_couse/Model/buildingProject.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:classic_cream_couse/Model/buildingProject.dart';
 class DatabaseService {
   final String uid;
 
@@ -15,12 +15,18 @@ class DatabaseService {
     );
 
   }
+  List<BuildingProject> _projectListFromSnapshot(QuerySnapshot snapshot) {
+    return snapshot.docs.map((doc) {
+      return BuildingProject.fromJson(doc.data());}).toList();
+  }
 
-  Stream<QuerySnapshot> get getProjects  {
-    return  projectCollection.snapshots();
+  Stream<List<BuildingProject>> get getProjects  {
+    return  projectCollection.snapshots().map(_projectListFromSnapshot);
 
   }
 
+
+  
 
   Future updateProject(BuildingProject buildingProject) async {
 

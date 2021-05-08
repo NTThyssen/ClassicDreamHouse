@@ -1,10 +1,13 @@
 import 'package:classic_dream_house_web/Screens/createProjectPage.dart';
+import 'package:classic_dream_house_web/Services/database.dart';
 import 'package:classic_dream_house_web/Widgets/menuTopBar.dart';
 import 'package:classic_dream_house_web/Widgets/projectWidget.dart';
 import 'package:classic_cream_couse/theme.dart';
 import 'package:classic_dream_house_web/mixin.dart';
 import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
+import 'package:classic_cream_couse/Model/buildingProject.dart';
+import 'package:quiver/iterables.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String route = '/home';
@@ -15,6 +18,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with BasicMixin {
   int pageIndex = 0;
   PageController pageController = PageController(initialPage:0, viewportFraction: 0.99);
+  var buildingList = [];
 
   _onPageViewChange(int page) {
     int previousPage = page;
@@ -25,7 +29,8 @@ class _HomeScreenState extends State<HomeScreen> with BasicMixin {
     });
   }
 
-
+  bool isInteger(num value) =>
+      value is int || value == value.roundToDouble();
 
   @override
   void dispose() {
@@ -38,152 +43,141 @@ class _HomeScreenState extends State<HomeScreen> with BasicMixin {
     super.initState();
   }
 
+
   @override
   Widget body() {
+    int segmentCount=1;
     // TODO: implement body
-    return Scaffold(
-      body: Column(
-          children: [
-            Spacer(flex: 1,),
-            MenuTopBar(),
-            Expanded(
-              flex: 20,
-              child: Stack(
-                  children: [
-                    Positioned(
-                      top: 10,
-                      bottom: 120,
-                      left: MediaQuery.of(context).size.width*0.12,
-                      right: MediaQuery.of(context).size.width*0.12,
-                      child: Container(
-                        width: MediaQuery.of(context).size.width*0.60,
-                        height: MediaQuery.of(context).size.height*0.70,
-                        color: appTheme.dividerColor,
-                      ),
-                    ),
-                    PageView(
-                        physics: AlwaysScrollableScrollPhysics() ,
-                        controller: pageController,
-                        onPageChanged: _onPageViewChange,
-                        children: [
-                          Scrollbar(
-                            controller: ScrollController(),
-                            child: SingleChildScrollView(
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.95,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Wrap(
-                                      alignment: WrapAlignment.spaceEvenly,
-                                      spacing: 100,
-                                      runSpacing: 40,
-                                      children: [
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Scrollbar(
-                            controller: ScrollController(),
-                            child: SingleChildScrollView(
-                              child: Padding(
-                                padding: EdgeInsets.all(16),
-                                child: Container(
-                                  width: MediaQuery.of(context).size.width*0.95,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(16.0),
-                                    child: Wrap(
-                                      alignment: WrapAlignment.spaceEvenly,
-                                      spacing: 100,
-                                      runSpacing: 40,
-                                      children: [
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                        ProjectWidget(),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ] ),
-                    Positioned(
-                        right: 40,
-                        top: MediaQuery.of(context).size.height*0.32 ,
-                        child: MaterialButton(
-                            height: 50,
-                            minWidth: 10,
-                            color: appTheme.primaryColor ,
-                            shape: CircleBorder(),
-                            child: Icon(Icons.arrow_forward_ios_outlined, color: Colors.white), onPressed: (){
-                          pageController.nextPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
-                        }
-                        )
-                    ),
-                    Positioned(
-                        left: 40,
-                        top: MediaQuery.of(context).size.height*0.32 ,
-                        child: MaterialButton(
-                            height: 50,
-                            minWidth: 10,
-                            color: pageIndex == 0  ? appTheme.disabledColor : appTheme.primaryColor,
-                            shape: CircleBorder(),
-                            child: Icon(Icons.arrow_back_ios_outlined, color: Colors.white), onPressed: (){
-                          pageController.previousPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
-                        }
-                        )
-                    )
-                  ]),
-            ),
-            Expanded(
-              flex: 3,
-              child: Align(
-                alignment: Alignment.center,
-                child: Container(
-                  width: 500,
-                  height: 100,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20)
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
-                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              )
-                          )
-                      ),
-                      child: Text("Opret Nyt Bygge Projekt", style: headerTextStyle,),
-                      onPressed: () {
-                        Navigator.pushNamed(context, CreateProjectPage.route);
-                      },
+    return StreamBuilder<List<BuildingProject>>(
+        stream: DatabaseService().getProjects,
+        builder: (context, snapshot) {
+          if(snapshot.hasData){
+           for(int i = 0; i < snapshot.data.length; i++){
+             if((i % 6) == 0 && i != 0){
+               segmentCount++;
+             }
+           }
+          }
 
+      return snapshot.hasData ? Scaffold(
+        body: Container(
+          color: Colors.grey[250],
+          child: Column(
+              children: [
+                Spacer(flex: 1,),
+                MenuTopBar(),
+                Expanded(
+                  flex: 20,
+                  child: Row(
+                      children: [
+                        Expanded(
+                          flex: 1,
+                          child: MaterialButton(
+                              height: 50,
+                              minWidth: 10,
+                              color: pageIndex == 0  ? appTheme.disabledColor : appTheme.primaryColor,
+                              shape: CircleBorder(),
+                              child: Icon(Icons.arrow_back_ios_outlined, color: Colors.white), onPressed: (){
+                            pageController.previousPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
+                          }
+                          ),
+                        ),
+                        Expanded(
+                          flex: 15,
+                          child: PageView.builder(
+                              physics: AlwaysScrollableScrollPhysics() ,
+                              controller: pageController,
+                              onPageChanged: _onPageViewChange,
+                              itemCount: segmentCount,
+                              itemBuilder: (context, index){
+                                 var segments = partition(snapshot.data, 6);
+                                  return ProjectWidgetContainer(buildingProject: segments.elementAt(index),);
+                              },
+                              ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: MaterialButton(
+                              height: 50,
+                              minWidth: 10,
+                              color: segmentCount == 1  ? appTheme.disabledColor : appTheme.primaryColor ,
+                              shape: CircleBorder(),
+                              child: Icon(Icons.arrow_forward_ios_outlined, color: Colors.white), onPressed: (){
+                            pageController.nextPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
+                          }
+                          ),
+                        ),
+
+                      ]),
+                ),
+                Expanded(
+                  flex: 3,
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      width: 500,
+                      height: 100,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20)
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
+                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                  RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  )
+                              )
+                          ),
+                          child: Text("Opret Nyt Bygge Projekt", style: headerTextStyle,),
+                          onPressed: () {
+                            Navigator.pushNamed(context, CreateProjectPage.route);
+                          },
+
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-            )
-          ]),
+                )
+              ]),
+        ),
+      ) : Text("there is no data");
+      }
     );
+
   }
 
 
+}
+class ProjectWidgetContainer extends StatelessWidget {
+  List<BuildingProject> buildingProject;
+  ProjectWidgetContainer({this.buildingProject});
+  @override
+  Widget build(BuildContext context) {
+    return GridView.builder(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+            maxCrossAxisExtent: 600,
+            childAspectRatio: 3 / 2,
+            crossAxisSpacing: 20,
+            mainAxisSpacing: 20),
+        itemCount: buildingProject.length,
+        itemBuilder: (BuildContext ctx, index) {
+         return Padding(
+           padding: EdgeInsets.all(16),
+           child: Container(
+
+             width: MediaQuery.of(context).size.width*0.95,
+             child: Padding(
+               padding: const EdgeInsets.all(16.0),
+               child: ProjectWidget(buildingProject: buildingProject[index],),
+             ),
+           ),
+         );
+        });
+
+
+  }
 }
 
