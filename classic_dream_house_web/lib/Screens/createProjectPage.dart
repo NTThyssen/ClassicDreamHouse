@@ -344,7 +344,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                     if(valid){
 
                     }
-
                    DatabaseService().createProject(
                        BuildingProject(
                          timeLineData: timelineDataList,
