@@ -5,10 +5,12 @@ import '../theme.dart';
 class MainButtonType extends StatelessWidget {
   final String buttonText;
   final VoidCallback onClick;
-  MainButtonType({ this.buttonText, this.onClick});
+  final Key btnKey;
+  MainButtonType({ this.buttonText, this.onClick, this.btnKey});
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
+      key: btnKey,
       style: ButtonStyle(
           backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(

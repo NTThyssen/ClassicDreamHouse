@@ -185,35 +185,37 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                   ),
 
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                             await uploadImage();
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                                border: Border.all(color: appTheme.primaryColor),
-                                borderRadius: BorderRadius.circular(16)
-                            ),
-                            height: 300,
-                            width: 300,
-                            child: Hero(
-                              tag: widget.buildingProject.projectuuId,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    colorFilter: new ColorFilter.mode(Colors.transparent.withOpacity(1), BlendMode.dstATop),
-                                    image: AssetImage("images/funkHouse.jpg"),
-                                    fit: BoxFit.cover,
+                    child: SingleChildScrollView(
+                      child: Column (
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                               await uploadImage();
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  border: Border.all(color: appTheme.primaryColor),
+                                  borderRadius: BorderRadius.circular(16)
+                              ),
+                              height: 300,
+                              width: 300,
+                              child: Hero(
+                                tag: widget?.buildingProject?.projectuuId ?? "",
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      colorFilter: new ColorFilter.mode(Colors.transparent.withOpacity(1), BlendMode.dstATop),
+                                      image: AssetImage("images/funkHouse.jpg"),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            )
+                              )
+                            ),
                           ),
-                        ),
-                      ],),
+                        ],),
+                    ),
                   ),
                   Expanded(
                     child: Padding(
@@ -239,6 +241,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                             width: 80,
                             height: 80,
                             child: IconButton(
+                              key: Key("timelineBtn"),
                               icon: Icon(Icons.add_circle, color: appTheme.primaryColor, size: 80,),
                               onPressed: () {
                                 timelineInitController.text="";
@@ -269,11 +272,13 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                                                 children: <Widget>[
                                                   Padding(
                                                     padding: EdgeInsets.all(8.0),
-                                                    child: InputField(labelText: "Category",controller: timelineInitController,),
+                                                    child: InputField(inputKey: Key("inputTimeline"), labelText: "Category",controller: timelineInitController,),
                                                   ),
                                                   Padding(
                                                       padding: const EdgeInsets.all(8.0),
-                                                      child: MainButtonType(buttonText:"Tilføj til tidslinje",
+                                                      child: MainButtonType(
+                                                        btnKey: Key("addTimelineKey"),
+                                                        buttonText:"Tilføj til tidslinje",
                                                         onClick: () {
                                                           setState(() {
                                                             TimelineData temp = TimelineData(title: timelineInitController.text, status: Status.notStarted);
@@ -335,6 +340,10 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                   ),
                   child: Text("Opret Bygge Projekt", style: headerTextStyle,),
                   onPressed: () {
+                    var valid = _formKey.currentState.validate();
+                    if(valid){
+
+                    }
 
                    DatabaseService().createProject(
                        BuildingProject(
@@ -346,7 +355,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                          mobile: mobileController.text,
                          buildingAddress: buildingAddressController.text,
                          livingAddress: livingAddressController.text,)
-
                        ),
                     );
                   },

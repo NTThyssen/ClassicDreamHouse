@@ -1,18 +1,27 @@
 import 'package:flutter/material.dart';
 import '../theme.dart';
 
+
+class InputFieldValidator {
+    static String validate(String input){
+      return input.isEmpty ? "Feltet må ikke være tomt" : null;
+    }
+}
+
+
+
 class InputField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
   final String initialValue;
-  InputField({this.controller, this.labelText, this.initialValue});
+  final Key inputKey;
+  InputField({this.controller, this.labelText, this.initialValue, this.inputKey});
 
   @override
   _InputFieldState createState() => _InputFieldState();
 }
 
 class _InputFieldState extends State<InputField> {
-
   textListener(){
     print(widget.controller.text);
   }
@@ -28,6 +37,8 @@ class _InputFieldState extends State<InputField> {
       width: MediaQuery.of(context).size.width*0.15,
       color: appTheme.backgroundColor,
       child: TextFormField(
+        validator: (input) => InputFieldValidator.validate(input),
+        key: widget.inputKey,
         controller: widget.controller,
         autofocus: true,
         decoration: InputDecoration(
