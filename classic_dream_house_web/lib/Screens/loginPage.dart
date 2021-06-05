@@ -12,6 +12,12 @@ class _LoginPageState extends State<LoginPage> with BasicMixin {
   TextEditingController username =  TextEditingController();
   TextEditingController password =  TextEditingController();
   @override
+  bool hasTopBar() {
+    // TODO: implement hasTopBar
+    return false;
+  }
+
+  @override
   Widget body() {
     return Stack(
       children: [

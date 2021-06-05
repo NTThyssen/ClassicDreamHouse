@@ -25,7 +25,8 @@ import 'package:path/path.dart' as path;
 
 class CreateProjectPage extends StatefulWidget {
   static const String route = '/createProject';
-
+  BuildingProject buildingProject;
+  CreateProjectPage({this.buildingProject});
   @override
   _CreateProjectPageState createState() => _CreateProjectPageState();
 }
@@ -35,7 +36,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
   List<dynamic> timelineElements = [];
   List<TimelineData> timelineDataList = [];
   addToTimeline(Widget widget){
-    timelineElements.length == 0 ? timelineElements.add(widget) : timelineElements.insert(timelineElements.length-1 , Center(child: widget));
+    timelineElements.length == 0 ? timelineElements.add(widget) : timelineElements.insert(timelineElements.length , Center(child: widget));
 
   }
 
@@ -47,79 +48,22 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
  TextEditingController livingAddressController = TextEditingController();
   TextEditingController timelineInitController = TextEditingController();
  final _formKey = GlobalKey<FormState>();
- @override
-  Widget appBar() {
-    return AppBar(
-      leading: IconButton(icon: Icon(Icons.arrow_back), color: appTheme.backgroundColor, onPressed: (){Navigator.pop(context);},) ,
-    );
-  }
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    timelineElements.add( Center(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: IconButton(
-          icon: Icon(Icons.add_circle, color: appTheme.primaryColor, size: 40,),
-          onPressed: () {
-            timelineInitController.text="";
-            showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    content: Stack(
-                      overflow: Overflow.visible,
-                      children: <Widget>[
-                        Positioned(
-                          right: -40.0,
-                          top: -40.0,
-                          child: InkResponse(
-                            onTap: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: CircleAvatar(
-                              child: Icon(Icons.close),
-                              backgroundColor: Colors.red,
-                            ),
-                          ),
-                        ),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: <Widget>[
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: InputField(labelText: "Category",controller: timelineInitController,),
-                              ),
-                              Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: MainButtonType(buttonText:"Tilføj til tidslinje",
-                                    onClick: () {
-                                      setState(() {
-                                        TimelineData temp = TimelineData(title: timelineInitController.text, status: Status.notStarted);
-                                        timelineDataList.add(temp);
-                                        addToTimeline( TimelineInputWidget(timelineData: temp));
-                                      });
-                                      Navigator.of(context).pop();
-                                    },
-                                  )
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                });
-          },
-        ),
-      ),
-    ),
-    );
- }
+    TimelineData temp = TimelineData(title: "Tilføj Titel", status: Status.notStarted);
+    timelineDataList.add(temp);
+    addToTimeline(TimelineInputWidget(timelineData: temp,));
+    TimelineData temp2 = TimelineData(title: "Tilføj Titel", status: Status.notStarted);
+    timelineDataList.add(temp2);
+    TimelineData temp3 = TimelineData(title: "Tilføj Titel", status: Status.notStarted);
+    timelineDataList.add(temp3);
+    addToTimeline(TimelineInputWidget(timelineData: temp2,));
+    addToTimeline(TimelineInputWidget(timelineData: temp3,));
+    }
 
 
   fb.UploadTask _uploadTask;
@@ -176,146 +120,244 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
           );
         });
         }
+  @override
+  Widget appBar() {
+    return AppBar(
+      title: Text("Classic Dream House", style: headerTextStyle.copyWith(fontSize: 26),),
+      leading: IconButton(icon: Icon(Icons.arrow_back), color: appTheme.backgroundColor, onPressed: (){Navigator.pop(context);},) ,
+      centerTitle: true,
+    );
+  }
 
 
   @override
   Widget body() {
+    print(widget.buildingProject);
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context);
         return true;
       },
       child: Scaffold(
-        body: Container(
-          child: Column(
-            children: [
-              SizedBox(height: 50,),
-              MenuTopBar(),
-              Expanded(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              children: [
-                                Center(child: Text("Tilføj Elementer til tidslinje", style: headerTextStyle.copyWith(color: appTheme.primaryColor),)),
-                                Expanded(
-                                  child: ListView.builder(
-                                    itemCount: timelineElements.length,
-                                    itemBuilder: (_, index) => timelineElements[index]
+        body: Column(
+          children: [
+            Expanded(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Expanded(
+                                child: ReorderableListView.builder(
+                                  header: Center(child: Text("Tilføj Elementer til tidslinje", style: headerTextStyle.copyWith(color: appTheme.primaryColor),)),
+                                    onReorder: (oldIndex, newIndex) {
+                                      setState(() {
+                                        if (newIndex > oldIndex) {
+                                          newIndex = newIndex - 1;
+                                        }
+                                        final element = timelineElements.removeAt(oldIndex);
+                                        timelineElements.insert(newIndex, element);
+                                      });
+                                    },
+                                  itemCount: timelineElements.length,
+
+                                  itemBuilder: (_, index) {
+                                    return Container(
+                                      key: ValueKey(timelineElements[index]),
+                                      child:  timelineElements[index],
+                                    );
+
+                                  }
+                                ),
+                              ),
+
+                              SizedBox(height: 60,)
+
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                             await uploadImage();
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(color: appTheme.primaryColor),
+                                borderRadius: BorderRadius.circular(16)
+                            ),
+                            height: 300,
+                            width: 300,
+                            child: Hero(
+                              tag: widget.buildingProject.projectuuId,
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    colorFilter: new ColorFilter.mode(Colors.transparent.withOpacity(1), BlendMode.dstATop),
+                                    image: AssetImage("images/funkHouse.jpg"),
+                                    fit: BoxFit.cover,
                                   ),
                                 ),
-
-                                SizedBox(height: 60,)
-
-                              ],
-                            ),
+                              ),
+                            )
                           ),
+                        ),
+                      ],),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(0, 0, 150, 0),
+                      child: Column(
+                        children: [
+                          DocumentUploadWidget(),
                         ],
                       ),
                     ),
-
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  ),
+                ],
+              ),
+            ),
+            Expanded(
+                child: Row(
+                    children: [
+                      Expanded(child:
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          GestureDetector(
-                            onTap: () async {
-                               await uploadImage();
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                  border: Border.all(color: appTheme.primaryColor),
-                                  borderRadius: BorderRadius.circular(16)
-                              ),
-                              height: 300,
-                              width: 300,
-                              child: Icon(Icons.image, color: appTheme.primaryColor, size: 80,),
+                          Container(
+                            width: 80,
+                            height: 80,
+                            child: IconButton(
+                              icon: Icon(Icons.add_circle, color: appTheme.primaryColor, size: 80,),
+                              onPressed: () {
+                                timelineInitController.text="";
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Stack(
+                                          overflow: Overflow.visible,
+                                          children: <Widget>[
+                                            Positioned(
+                                              right: -40.0,
+                                              top: -40.0,
+                                              child: InkResponse(
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: CircleAvatar(
+                                                  child: Icon(Icons.close),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              ),
+                                            ),
+                                            Form(
+                                              key: _formKey,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Padding(
+                                                    padding: EdgeInsets.all(8.0),
+                                                    child: InputField(labelText: "Category",controller: timelineInitController,),
+                                                  ),
+                                                  Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: MainButtonType(buttonText:"Tilføj til tidslinje",
+                                                        onClick: () {
+                                                          setState(() {
+                                                            TimelineData temp = TimelineData(title: timelineInitController.text, status: Status.notStarted);
+                                                            timelineDataList.add(temp);
+                                                            addToTimeline( TimelineInputWidget(timelineData: temp));
+                                                          });
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                      )
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              },
                             ),
                           ),
-                        ],),
-                    ),
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.fromLTRB(0, 0, 150, 0),
+                        ],
+                      )
+                      ),
+                      Expanded(
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
                           children: [
-                            DocumentUploadWidget(),
+                            InputField(controller: nameController, labelText: "Navn"),
+                            InputField(controller: partnerNameController, labelText: "Partner Navn",),
+                            InputField(controller: mailController, labelText: "Email",),
                           ],
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Expanded(
-                  child: Row(
-                      children: [
-                        Expanded(child: SizedBox(width: 50,)),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              InputField(controller: nameController, labelText: "Navn",),
-                              InputField(controller: partnerNameController, labelText: "Partner Navn",),
-                              InputField(controller: mailController, labelText: "Email",),
-                            ],
-                          ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            InputField(controller: mobileController, labelText: "Mobil",),
+                            InputField(controller: buildingAddressController, labelText: "Bygge Adresse",),
+                            InputField(controller: livingAddressController, labelText: "Beboelses Adresse",),
+                          ],
                         ),
-                        Expanded(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              InputField(controller: mobileController, labelText: "Mobil",),
-                              InputField(controller: buildingAddressController, labelText: "Bygge Adresse",),
-                              InputField(controller: livingAddressController, labelText: "Beboelses Adresse",),
-                            ],
-                          ),
-                        )
-                      ],
-                  )
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
-                child: ConstrainedBox(
-                  constraints: BoxConstraints.tightFor(width: 300, height: 50),
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18.0),
-                            )
-                        )
-                    ),
-                    child: Text("Opret Bygge Projekt", style: headerTextStyle,),
-                    onPressed: () {
-
-                     DatabaseService().createProject(
-                         BuildingProject(
-                           timeLineData: timelineDataList,
-                             customer: Customer(
-                           name:nameController.text,
-                           partnerName: partnerNameController.text,
-                           email: mailController.text,
-                           mobile: mobileController.text,
-                           buildingAddress: buildingAddressController.text,
-                           livingAddress: livingAddressController.text,)
-
-                         ),
-                      );
-                    },
+                      )
+                    ],
+                )
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+              child: ConstrainedBox(
+                constraints: BoxConstraints.tightFor(width: 300, height: 50),
+                child: ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          )
+                      )
                   ),
+                  child: Text("Opret Bygge Projekt", style: headerTextStyle,),
+                  onPressed: () {
+
+                   DatabaseService().createProject(
+                       BuildingProject(
+                         timeLineData: timelineDataList,
+                           customer: Customer(
+                         name:nameController.text,
+                         partnerName: partnerNameController.text,
+                         email: mailController.text,
+                         mobile: mobileController.text,
+                         buildingAddress: buildingAddressController.text,
+                         livingAddress: livingAddressController.text,)
+
+                       ),
+                    );
+                  },
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
+
   }
 /*Future uploadFile() async {
     StorageReference storageReference = FirebaseStorage.instance
@@ -350,9 +392,3 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
 
 
 }
-
-  @override
-  Widget body() {
-    // TODO: implement body
-    throw UnimplementedError();
-  }

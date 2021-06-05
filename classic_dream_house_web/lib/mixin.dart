@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:classic_cream_couse/theme.dart';
 mixin BasicMixin<Page extends StatefulWidget> on State<Page> {
   Widget appBar() {
-    appBar:return AppBar(
+    return AppBar(
       backgroundColor: appTheme.primaryColor,
       title: Text("Classic Dream House", style: headerTextStyle.copyWith(fontSize: 26),),
       centerTitle: true,
     );
   }
-
   @override
+  //build
   Widget build(BuildContext context) {
     return Scaffold(
       extendBody: extendBody(),
@@ -18,7 +18,37 @@ mixin BasicMixin<Page extends StatefulWidget> on State<Page> {
       bottomNavigationBar: bottomNavigationBar(),
       body: Container(
         width: MediaQuery.of(context).size.width,
-        child: body(),
+        child: Column(
+          children: [
+            hasTopBar() ? Expanded(
+              flex: 1,
+              child: Center(
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    color:  appTheme.primaryColor,
+                  ),
+                  width: MediaQuery.of(context).size.width*0.85,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Wrap(
+                      spacing: 10,
+                      children: [
+                        TextButton(child:Text("Hjem", style: headerTextStyle),  onPressed: () {  },),
+                        TextButton(child:Text("Oversigt", style: headerTextStyle),  onPressed: () {  },),
+                        TextButton(child:Text("Indstillinger", style: headerTextStyle),
+                          onPressed: () {  },),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ) : Container(),
+            Expanded(
+              flex: 9,
+                child: body())
+          ],
+        ),
       ),
     );
   }
@@ -26,6 +56,8 @@ mixin BasicMixin<Page extends StatefulWidget> on State<Page> {
   Widget body();
 
   bool extendBody() => false;
+
+  bool hasTopBar() => true;
 
   bool extendBehindAppBar() => false;
 

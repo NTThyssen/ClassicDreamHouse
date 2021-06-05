@@ -12,10 +12,10 @@ ThemeData appTheme = ThemeData(
   ),
   brightness: Brightness.light,
   splashColor: white,
-  accentColor: green,
+  accentColor: Colors.blueAccent,
   disabledColor: lightGrey,
-  dividerColor: primaryGreenWithOpacifty,
-  primaryColor: primaryGreen,
+  dividerColor: primaryBlueWithOpacifty,
+  primaryColor: primaryBlue,
   backgroundColor: white,
   dialogBackgroundColor: white,
   dialogTheme: DialogTheme(
@@ -110,13 +110,13 @@ appTheme.textTheme.headline6.copyWith(color: white);
   https://www.figma.com/file/nELA6ykZqxKFR2n3VSs0LB/VVS?node-id=248%3A1783
 */
 
-/* Green primary */
-const Color primaryGreen = Color(0xff2ECC71);
+/* Blue primary */
+const Color primaryBlue = Color(0xff005F6A);
 
-const Color primaryGreenWithOpacifty = Color(0x442ECC71);
+const Color primaryBlueWithOpacifty = Color(0x44005F6A);
 /* White */
 const Color white = Color(0xffFFFFFF);
-/* Green */
-const Color green = Color(0xffAAD99A);
+/* Blue */
+const Color blue = Color(0x44005F6A);
 /* Light Grey */
 const Color lightGrey = Color(0xffC4C4C4);

@@ -38,9 +38,9 @@ class _TimelineInputWidgetState extends State<TimelineInputWidget> {
             // Let's position this overlay to the right of the button.
             position: OverlayContainerPosition(
               // Left position.
-              150,
+              MediaQuery.of(context).size.width*0.08,
               // Bottom position.
-              45,
+              MediaQuery.of(context).size.height*0.16,
             ),
             // The content inside the overlay.
 

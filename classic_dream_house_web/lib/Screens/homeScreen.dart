@@ -64,8 +64,6 @@ class _HomeScreenState extends State<HomeScreen> with BasicMixin {
           color: Colors.grey[250],
           child: Column(
               children: [
-                Spacer(flex: 1,),
-                MenuTopBar(),
                 Expanded(
                   flex: 20,
                   child: Row(
@@ -171,7 +169,16 @@ class ProjectWidgetContainer extends StatelessWidget {
              width: MediaQuery.of(context).size.width*0.95,
              child: Padding(
                padding: const EdgeInsets.all(16.0),
-               child: ProjectWidget(buildingProject: buildingProject[index],),
+               child: GestureDetector(
+                 onTap: () {
+                   Navigator.push(
+                       context,
+                       PageRouteBuilder(
+                           transitionDuration: Duration(seconds: 1),
+                           pageBuilder: (_, __, ___) => CreateProjectPage(buildingProject: buildingProject[index],)));
+                 },
+                   child: ProjectWidget(buildingProject: buildingProject[index],)
+               ),
              ),
            ),
          );

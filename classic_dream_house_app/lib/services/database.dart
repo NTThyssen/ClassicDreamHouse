@@ -8,17 +8,12 @@ class DatabaseService {
   final CollectionReference projectCollection = FirebaseFirestore.instance.collection("projects");
 
 
-  Future createProject(BuildingProject buildingProject) async {
 
-    return await projectCollection.doc(uid).set(
-        buildingProject.toJson()
-    );
 
-  }
-
-  Stream<QuerySnapshot> get getProjects  {
-    return  projectCollection.snapshots();
-
+  Stream<BuildingProject> projectStream(String doc){
+    return projectCollection.doc(doc).snapshots().map((snap) {
+      print(BuildingProject.fromJson(snap.data as Map<String, dynamic>));
+      return BuildingProject.fromJson(snap.data as Map<String, dynamic>); });
   }
 
   Future<BuildingProject> getProject(String projectUuid) async {

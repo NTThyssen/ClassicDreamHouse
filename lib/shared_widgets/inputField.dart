@@ -4,7 +4,8 @@ import '../theme.dart';
 class InputField extends StatefulWidget {
   final TextEditingController controller;
   final String labelText;
-  InputField({this.controller, this.labelText});
+  final String initialValue;
+  InputField({this.controller, this.labelText, this.initialValue});
 
   @override
   _InputFieldState createState() => _InputFieldState();
@@ -30,7 +31,7 @@ class _InputFieldState extends State<InputField> {
         controller: widget.controller,
         autofocus: true,
         decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.greenAccent, width: 2)),
+            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: appTheme.primaryColor, width: 2)),
             enabled: true,
             border: OutlineInputBorder(),
             labelText: widget.labelText,

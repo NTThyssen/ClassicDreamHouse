@@ -15,6 +15,10 @@ class DatabaseService {
     );
 
   }
+
+
+
+
   List<BuildingProject> _projectListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
       return BuildingProject.fromJson(doc.data());}).toList();
