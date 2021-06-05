@@ -3,7 +3,7 @@ import 'dart:html' as html;
 import 'dart:typed_data';
 import 'package:classic_dream_house_web/Widgets/documentUploadWidget.dart';
 import 'package:path/path.dart' as p;
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:classic_cream_couse/Model/buildingProject.dart';
 import 'package:classic_cream_couse/Model/customer.dart';
 import 'package:classic_dream_house_web/Screens/homeScreen.dart';
@@ -342,7 +342,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                   onPressed: () {
                     var valid = _formKey.currentState.validate();
                     if(valid){
-
+                          print("valid stuff");
                     }
                    DatabaseService().createProject(
                        BuildingProject(
@@ -363,7 +363,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
           ],
         ),
       ),
-    );
+    ) ;
 
   }
 /*Future uploadFile() async {

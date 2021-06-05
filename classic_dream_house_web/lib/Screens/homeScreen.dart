@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:sticky_headers/sticky_headers/widget.dart';
 import 'package:classic_cream_couse/Model/buildingProject.dart';
 import 'package:quiver/iterables.dart';
-
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 class HomeScreen extends StatefulWidget {
   static const String route = '/home';
   @override
@@ -16,6 +16,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with BasicMixin {
+  Widget  _loadingWidget = SpinKitFadingCircle(
+    size: 150,
+    color: appTheme.backgroundColor,
+  );
   int pageIndex = 0;
   PageController pageController = PageController(initialPage:0, viewportFraction: 0.99);
   var buildingList = [];
@@ -59,89 +63,107 @@ class _HomeScreenState extends State<HomeScreen> with BasicMixin {
            }
           }
 
-      return snapshot.hasData ? Scaffold(
-        body: Container(
-          color: Colors.grey[250],
-          child: Column(
-              children: [
-                Expanded(
-                  flex: 20,
-                  child: Row(
-                      children: [
-                        Expanded(
-                          flex: 1,
-                          child: MaterialButton(
-                              height: 50,
-                              minWidth: 10,
-                              color: pageIndex == 0  ? appTheme.disabledColor : appTheme.primaryColor,
-                              shape: CircleBorder(),
-                              child: Icon(Icons.arrow_back_ios_outlined, color: Colors.white), onPressed: (){
-                            pageController.previousPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
-                          }
+      return AnimatedSwitcher(
+        child: snapshot.hasData ? Scaffold(
+          body: Container(
+            color: Colors.grey[250],
+            child: Column(
+                children: [
+                  Expanded(
+                    flex: 20,
+                    child: Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: MaterialButton(
+                                height: 50,
+                                minWidth: 10,
+                                color: pageIndex == 0  ? appTheme.disabledColor : appTheme.primaryColor,
+                                shape: CircleBorder(),
+                                child: Icon(Icons.arrow_back_ios_outlined, color: Colors.white), onPressed: (){
+                              pageController.previousPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
+                            }
+                            ),
                           ),
-                        ),
-                        Expanded(
-                          flex: 15,
-                          child: PageView.builder(
+                          Expanded(
+                            flex: 15,
+                            child: PageView.builder(
                               physics: AlwaysScrollableScrollPhysics() ,
                               controller: pageController,
                               onPageChanged: _onPageViewChange,
                               itemCount: segmentCount,
                               itemBuilder: (context, index){
-                                 var segments = partition(snapshot.data, 6);
-                                  return ProjectWidgetContainer(buildingProject: segments.elementAt(index),);
+                                var segments = partition(snapshot.data, 6);
+                                return ProjectWidgetContainer(buildingProject: segments.elementAt(index),);
                               },
-                              ),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: MaterialButton(
-                              height: 50,
-                              minWidth: 10,
-                              color: segmentCount == 1  ? appTheme.disabledColor : appTheme.primaryColor ,
-                              shape: CircleBorder(),
-                              child: Icon(Icons.arrow_forward_ios_outlined, color: Colors.white), onPressed: (){
-                            pageController.nextPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
-                          }
+                            ),
                           ),
-                        ),
-
-                      ]),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: Container(
-                      width: 500,
-                      height: 100,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20)
-                      ),
-                      child: Padding(
-                        padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
-                        child: ElevatedButton(
-                          style: ButtonStyle(
-                              backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
-                              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                  )
-                              )
+                          Expanded(
+                            flex: 1,
+                            child: MaterialButton(
+                                height: 50,
+                                minWidth: 10,
+                                color: segmentCount == 1  ? appTheme.disabledColor : appTheme.primaryColor ,
+                                shape: CircleBorder(),
+                                child: Icon(Icons.arrow_forward_ios_outlined, color: Colors.white), onPressed: (){
+                              pageController.nextPage(duration: Duration(milliseconds: 1000), curve: Curves.ease);
+                            }
+                            ),
                           ),
-                          child: Text("Opret Nyt Bygge Projekt", style: headerTextStyle,),
-                          onPressed: () {
-                            Navigator.pushNamed(context, CreateProjectPage.route);
-                          },
 
+                        ]),
+                  ),
+                  Expanded(
+                    flex: 3,
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Container(
+                        width: 500,
+                        height: 100,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20)
+                        ),
+                        child: Padding(
+                          padding: EdgeInsets.fromLTRB(0, 0, 0, 50),
+                          child: ElevatedButton(
+                            style: ButtonStyle(
+                                backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
+                                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    )
+                                )
+                            ),
+                            child: Text("Opret Nyt Bygge Projekt", style: headerTextStyle,),
+                            onPressed: () {
+                              Navigator.pushNamed(context, CreateProjectPage.route);
+                            },
+
+                          ),
                         ),
                       ),
                     ),
+                  )
+                ]),
+          ),
+        ) :  Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: SpinKitCubeGrid(
+              size: 80,
+              itemBuilder: (BuildContext context, int index) {
+                return DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: index.isEven ? appTheme.primaryColor :appTheme.backgroundColor,
                   ),
-                )
-              ]),
+                );
+              },
+            ),
+          ),
         ),
-      ) : Text("there is no data");
+          duration: const Duration(seconds: 4),
+      );
       }
     );
 

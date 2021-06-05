@@ -22,6 +22,7 @@ class _ProjectWidgetState extends State<ProjectWidget> {
     //print(buildingProject.timeLineData.length/completed);
     return completed/buildingProject.timeLineData.length;
   }
+  int cnt =0;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -33,7 +34,7 @@ class _ProjectWidgetState extends State<ProjectWidget> {
       child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Hero(
-          tag: widget.buildingProject.projectuuId,
+          tag: widget?.buildingProject?.projectuuId ?? cnt++,
           child: Container(
               width: 400,
               height: 300,
@@ -64,7 +65,7 @@ class _ProjectWidgetState extends State<ProjectWidget> {
                           ),
                         ),
                         Center(
-                            child: Text("${getCompletedTasks(widget.buildingProject).toStringAsFixed(2) }  %")
+                            child: Text("${getCompletedTasks(widget.buildingProject).toStringAsFixed(2) }  %", style: DefaultTextStyle.of(context).style,)
                         )
                       ],
                     ),
