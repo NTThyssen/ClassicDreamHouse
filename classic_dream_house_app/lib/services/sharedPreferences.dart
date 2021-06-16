@@ -17,6 +17,6 @@ class SharedPref {
 
   save(String key, value) async {
     Future<SharedPreferences> prefs = SharedPreferences.getInstance();
-    prefs.then((val) => val.setString(key, value) ) ;
+    prefs.then((val) => val.setString(key, json.encode(value)) ) ;
   }
 }
