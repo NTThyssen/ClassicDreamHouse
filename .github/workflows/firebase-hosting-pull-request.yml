@@ -18,7 +18,17 @@ jobs:
         with:
           flutter-version: '2.0.1'
       - run: flutter pub get
-      - run: cd classic_dream_house_app && flutter pub get && flutter build apk --release && flutter build ios --no-codesign
+      - run: |
+          cd classic_dream_house_app
+          flutter pub get
+          flutter build apk --release
+          flutter build ios --no-codesign
+          cd build/ios/iphoneos
+          mkdir Payload
+          cd Payload
+          ln -s ../Runner.app
+          cd ..
+          zip -r app.ipa Payload
       - name: release APK
         uses: ncipollo/release-action@v1
         with:

@@ -32,6 +32,7 @@ dependencies:
   cloud_firestore: ^0.14.0+2
   adaptive_library: ^0.5.1
   provider: ^4.0.0
+  adaptive_dialog: ^1.0.0
   quiver: ^2.0.1
   simple_animations: ^3.1.1
 dev_dependencies:

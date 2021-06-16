@@ -6,6 +6,7 @@ import 'package:classic_dream_house_app/services/database.dart';
 import 'package:classic_dream_house_app/services/sharedPreferences.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_library/adaptive_library.dart';
+import 'package:adaptive_dialog/adaptive_dialog.dart';
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -97,7 +98,12 @@ class _LoginPageState extends State<LoginPage> {
                             child: AdaptiveIconButton(
                               icon: Icon(Icons.help, color: appTheme.primaryColor, size:  30,),
                               iconCupertino: Icon(Icons.help, color: appTheme.primaryColor, size: 30,),
-                              onPressed: ()  {
+                              onPressed: () async {
+                                return await showOkAlertDialog(
+                                    context: context,
+                                    title: 'Title',
+                                    message: "Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App en. Ellers kontakt os om ID",
+                                );
                                 showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
