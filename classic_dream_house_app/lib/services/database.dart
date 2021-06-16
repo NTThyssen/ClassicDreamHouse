@@ -27,7 +27,6 @@ class DatabaseService {
 
 
   Future updateProject(BuildingProject buildingProject) async {
-
     return await projectCollection.doc(uid).update(
         buildingProject.toJson()
     );

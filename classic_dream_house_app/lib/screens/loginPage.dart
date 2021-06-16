@@ -5,7 +5,7 @@ import 'package:classic_dream_house_app/screens/mainTabbarPage.dart';
 import 'package:classic_dream_house_app/services/database.dart';
 import 'package:classic_dream_house_app/services/sharedPreferences.dart';
 import 'package:flutter/material.dart';
-
+import 'package:adaptive_library/adaptive_library.dart';
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -24,7 +24,6 @@ class _LoginPageState extends State<LoginPage> {
               BuildingProject>(
               future: DatabaseService().getProject("lADNY08fzV1PCgTO3x5L"),
               builder: (context, snapshot) {
-
                 return Container(
                   child: Stack(
                     children: [
@@ -56,7 +55,6 @@ class _LoginPageState extends State<LoginPage> {
                                 onChanged: (textInput) {
                                   input = textInput;
                                 },
-                                autofocus: true,
                                 decoration: InputDecoration(
                                     enabled: true,
                                     border: OutlineInputBorder(),
@@ -92,6 +90,32 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(36.0),
+                        child: Align(
+                          alignment: Alignment.topRight,
+                            child: AdaptiveIconButton(
+                              icon: Icon(Icons.help, color: appTheme.primaryColor, size:  30,),
+                              iconCupertino: Icon(Icons.help, color: appTheme.primaryColor, size: 30,),
+                              onPressed: ()  {
+                                showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AdaptiveAlertDialog(
+                                    title: Center(child: Text("Info", style: appTheme.textTheme.headline2.copyWith(color: appTheme.primaryColor),)),
+                                    content: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",style: appTheme.textTheme.bodyText1.copyWith(color:appTheme.primaryColor, fontSize: 16),),
+                                    actions: [
+                                      AdaptiveAlertDialogButton(
+                                          closeOnPress: true,
+                                          child: Text("Ok"),
+                                          onPressed: null)
+                                    ],
+                                  );
+                                }
+                            );
+                          },
+                        )),
+                      )
                     ],
                   ),
                 );

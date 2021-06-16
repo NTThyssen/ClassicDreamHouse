@@ -1,11 +1,10 @@
 import 'package:classic_dream_house_web/Screens/createProjectPage.dart';
 import 'package:classic_dream_house_web/Services/database.dart';
-import 'package:classic_dream_house_web/Widgets/menuTopBar.dart';
 import 'package:classic_dream_house_web/Widgets/projectWidget.dart';
 import 'package:classic_cream_couse/theme.dart';
 import 'package:classic_dream_house_web/mixin.dart';
 import 'package:flutter/material.dart';
-import 'package:sticky_headers/sticky_headers/widget.dart';
+import 'package:classic_cream_couse/shared_widgets/mainButtonType.dart';
 import 'package:classic_cream_couse/Model/buildingProject.dart';
 import 'package:quiver/iterables.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
@@ -199,7 +198,62 @@ class ProjectWidgetContainer extends StatelessWidget {
                            transitionDuration: Duration(seconds: 1),
                            pageBuilder: (_, __, ___) => CreateProjectPage(buildingProject: buildingProject[index],)));
                  },
-                   child: ProjectWidget(buildingProject: buildingProject[index],)
+                   child: Stack(
+                     children: [
+                       ProjectWidget(buildingProject: buildingProject[index],),
+                       Positioned(
+                         right: 40.0,
+                         top: 0.0,
+                         child: InkResponse(
+                           onTap: () {
+                             showDialog(
+                                 context: context,
+                                 builder: (BuildContext context) {
+                                   return AlertDialog(
+                                     content: Column(
+                                             mainAxisSize: MainAxisSize.min,
+                                             children: <Widget>[
+                                               Padding(
+                                                   padding: const EdgeInsets.all(8.0),
+                                                   child: Text("Er du sikker på at du vil slette Projektet?")
+                                               ),
+                                               Padding(
+                                                   padding: const EdgeInsets.all(8.0),
+                                                   child: Row(
+                                                     children: [
+                                                       MainButtonType(
+                                                         buttonText:"Fortryd",
+                                                         onClick: () {
+                                                           Navigator.of(context).pop();
+                                                         },
+                                                       ),
+                                                       MainButtonType(
+                                                         color: Colors.red,
+                                                         buttonText:"Slet Projekt",
+                                                         onClick: () async {
+                                                          await DatabaseService().deleteProject(buildingProject[index]);
+                                                          Navigator.of(context).pop();
+                                                         },
+                                                       ),
+                                                     ],
+                                                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                                   )
+                                               ),
+                                             ],
+                                           ),
+                                   );
+                                 });
+
+                           },
+                           child: CircleAvatar(
+                             radius: 20,
+                             child: Icon(Icons.delete, color: appTheme.backgroundColor,),
+                             backgroundColor: Colors.red,
+                           ),
+                         ),
+                       ),
+                     ],
+                   )
                ),
              ),
            ),

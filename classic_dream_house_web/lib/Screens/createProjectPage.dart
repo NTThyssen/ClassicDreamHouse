@@ -1,23 +1,21 @@
 import 'dart:html';
-import 'dart:html' as html;
-import 'dart:typed_data';
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker_web/image_picker_web.dart';
+import 'package:mime_type/mime_type.dart';
+import 'package:universal_html/src/html.dart' as html;
+import 'package:cool_alert/cool_alert.dart';
 import 'package:classic_dream_house_web/Widgets/documentUploadWidget.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:path/path.dart' as p;
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:classic_cream_couse/Model/buildingProject.dart';
 import 'package:classic_cream_couse/Model/customer.dart';
-import 'package:classic_dream_house_web/Screens/homeScreen.dart';
 import 'package:classic_dream_house_web/Services/database.dart';
-import 'package:classic_dream_house_web/Widgets/menuTopBar.dart';
 import 'package:classic_dream_house_web/Widgets/timelineInputWidget.dart';
 import 'package:classic_dream_house_web/mixin.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:classic_cream_couse/shared_widgets/inputField.dart';
 import 'package:classic_cream_couse/theme.dart';
 import 'package:classic_cream_couse/shared_widgets/mainButtonType.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:classic_cream_couse/Model/status.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:classic_cream_couse/Model/timelineData.dart';
@@ -48,21 +46,37 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
  TextEditingController livingAddressController = TextEditingController();
   TextEditingController timelineInitController = TextEditingController();
  final _formKey = GlobalKey<FormState>();
+ void populateProject(BuildingProject buildingProject){
+   nameController.text = buildingProject.customer.name;
+   partnerNameController.text = buildingProject.customer.partnerName;
+   mailController.text = buildingProject.customer.email;
+   buildingAddressController.text = buildingProject.customer.buildingAddress;
+   livingAddressController.text = buildingProject.customer.livingAddress;
+   mobileController.text = buildingProject.customer.mobile;
+   for(var elements in buildingProject.timeLineData){
+     timelineDataList.add(elements);
+     addToTimeline(TimelineInputWidget(timelineData: elements,));
+   }
+ }
 
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    TimelineData temp = TimelineData(title: "Tilføj Titel", status: Status.notStarted);
-    timelineDataList.add(temp);
-    addToTimeline(TimelineInputWidget(timelineData: temp,));
-    TimelineData temp2 = TimelineData(title: "Tilføj Titel", status: Status.notStarted);
-    timelineDataList.add(temp2);
-    TimelineData temp3 = TimelineData(title: "Tilføj Titel", status: Status.notStarted);
-    timelineDataList.add(temp3);
-    addToTimeline(TimelineInputWidget(timelineData: temp2,));
-    addToTimeline(TimelineInputWidget(timelineData: temp3,));
+    if(widget.buildingProject != null){
+      populateProject(widget.buildingProject);
+    }else{
+      TimelineData temp = TimelineData(title: "Tilføj Titel", status: Status.notStarted);
+      timelineDataList.add(temp);
+      addToTimeline(TimelineInputWidget(timelineData: temp,));
+      TimelineData temp2 = TimelineData(title: "Tilføj Titel", status: Status.notStarted);
+      timelineDataList.add(temp2);
+      TimelineData temp3 = TimelineData(title: "Tilføj Titel", status: Status.notStarted);
+      timelineDataList.add(temp3);
+      addToTimeline(TimelineInputWidget(timelineData: temp2,));
+      addToTimeline(TimelineInputWidget(timelineData: temp3,));
+    }
+
     }
 
 
@@ -77,7 +91,18 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
           .child(filePath)
           .put(pdf);
     });
+
   }
+  Future<Uri> uploadImageFile(html.File file,
+      {String imageName}) async {
+    fb.StorageReference storageRef = fb.storage().ref('images/$imageName');
+    fb.UploadTaskSnapshot uploadTaskSnapshot = await storageRef.putString(file.relativePath, 'base64').future;
+
+    Uri imageUri = await uploadTaskSnapshot.ref.getDownloadURL();
+    print(imageUri);
+    return imageUri;
+  }
+
   uploadImageToFirebase(File imageFile) async {
     final filePath = 'images/${p.basename(imageFile.name)}';
     setState(()  {
@@ -91,35 +116,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
 
   /// A "select file/folder" window will appear. User will have to choose a file.
   /// This file will be then read, and uploaded to firebase storage;
-  uploadImage() async {
-    // HTML input element
-    InputElement uploadInput = FileUploadInputElement();
-    uploadInput.click();
-
-    uploadInput.onChange.listen(
-            (changeEvent) {
-          final file = uploadInput.files.first;
-          final reader = FileReader();
-          // The FileReader object lets web applications asynchronously read the
-          // contents of files (or raw data buffers) stored on the user's computer,
-          // using File or Blob objects to specify the file or data to read.
-          // Source: https://developer.mozilla.org/en-US/docs/Web/API/FileReader
-
-          reader.readAsDataUrl(file);
-          // The readAsDataURL method is used to read the contents of the specified Blob or File.
-          //  When the read operation is finished, the readyState becomes DONE, and the loadend is
-          // triggered. At that time, the result attribute contains the data as a data: URL representing
-          // the file's data as a base64 encoded string.
-          // Source: https://developer.mozilla.org/en-US/docs/Web/API/FileReader/readAsDataURL
-
-          reader.onLoadEnd.listen(
-            // After file finiesh reading and loading, it will be uploaded to firebase storage
-                (loadEndEvent) async {
-              await uploadPDFToFirebase(file);
-            },
-          );
-        });
-        }
   @override
   Widget appBar() {
     return AppBar(
@@ -191,7 +187,10 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                         children: [
                           GestureDetector(
                             onTap: () async {
-                               await uploadImage();
+                              var file = await FilePicker.platform.pickFiles(allowMultiple: true);
+                              //print(file.);
+                            // await uploadImageFile();
+
                             },
                             child: Container(
                               decoration: BoxDecoration(
@@ -304,7 +303,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                       ),
                       Expanded(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             InputField(controller: nameController, labelText: "Navn"),
                             InputField(controller: partnerNameController, labelText: "Partner Navn",),
@@ -329,7 +328,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
               padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
               child: ConstrainedBox(
                 constraints: BoxConstraints.tightFor(width: 300, height: 50),
-                child: ElevatedButton(
+                child: widget.buildingProject == null ? ElevatedButton(
                   style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
                       shape: MaterialStateProperty.all<RoundedRectangleBorder>(
@@ -339,12 +338,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                       )
                   ),
                   child: Text("Opret Bygge Projekt", style: headerTextStyle,),
-                  onPressed: () {
-                    var valid = _formKey.currentState.validate();
-                    if(valid){
-                          print("valid stuff");
-                    }
-                   DatabaseService().createProject(
+                  onPressed: () async {
+                  var res = await DatabaseService().createProject(
                        BuildingProject(
                          timeLineData: timelineDataList,
                            customer: Customer(
@@ -356,8 +351,71 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                          livingAddress: livingAddressController.text,)
                        ),
                     );
+                  if(res == null){
+                    await CoolAlert.show(
+                      width: 400,
+                      context: context,
+                      autoCloseDuration: Duration(seconds: 2),
+                      type: CoolAlertType.success,
+                      text: "Projektet blev oprettet",
+                    );
+                    Navigator.pop(context);
+                  }else{
+                    await CoolAlert.show(
+                      width: 400,
+                      context: context,
+                      autoCloseDuration: Duration(seconds: 2),
+                      type: CoolAlertType.error,
+                      text: "Projektet ikke oprettet",
+                    );
+                  }
                   },
-                ),
+                ) : ElevatedButton(
+                  style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all<Color>(appTheme.primaryColor),
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0),
+                          )
+                      )
+                  ),
+                  child: Text("Opdater Bygge Projekt", style: headerTextStyle,),
+                  onPressed: () async{
+
+                   var res = await DatabaseService().updateProject(
+                      BuildingProject(
+                          projectuuId: widget.buildingProject.projectuuId,
+                          timeLineData: timelineDataList,
+                          customer: Customer(
+                            name:nameController.text,
+                            partnerName: partnerNameController.text,
+                            email: mailController.text,
+                            mobile: mobileController.text,
+                            buildingAddress: buildingAddressController.text,
+                            livingAddress: livingAddressController.text,)
+                      ),
+                    );
+                   if(res == null){
+                     print("---------------");
+                     await CoolAlert.show(
+                       width: 400,
+                       context: context,
+                       autoCloseDuration: Duration(seconds: 2),
+                       type: CoolAlertType.success,
+                       text: "Projektet blev opdateret",
+                     );
+                      Navigator.pop(context);
+                   }else{
+                     await CoolAlert.show(
+                       width: 400,
+                       context: context,
+                       autoCloseDuration: Duration(seconds: 2),
+                       type: CoolAlertType.error,
+                       text: "Projektet ikke opdateret",
+                     );
+                   }
+                  },
+                )
               ),
             ),
           ],

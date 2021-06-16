@@ -12,17 +12,18 @@ class _DocumentsPageState extends State<DocumentsPage> {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Wrap(
-          alignment: WrapAlignment.spaceEvenly,
-          runSpacing: 16,
-          children: [
-              PdfCard(pdfTitle: "Kontrakt",),
-              PdfCard(pdfTitle: "Plan Tegning",),
-              PdfCard(pdfTitle: "Dokument",),
-              PdfCard(pdfTitle: "Dokument",),
-          ],
-        ),
-      ),
+        child: GridView.builder(
+        gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
+        maxCrossAxisExtent: 200,
+        childAspectRatio: 2 / 2,
+        crossAxisSpacing: 20,
+        mainAxisSpacing: 20),
+        itemCount: 4,
+        itemBuilder: (BuildContext ctx, index) {
+          return PdfCard(pdfTitle: "Kontrakt");
+          }
+        )
+      )
     );
   }
 }

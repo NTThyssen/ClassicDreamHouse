@@ -26,7 +26,6 @@ class _MainTabbarPageState extends State<MainTabbarPage> with TickerProviderStat
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(kToolbarHeight),
         child: AppBar(
-
           backgroundColor: appTheme.primaryColor.withOpacity(0.60),
           bottom: TabBar(
             indicatorSize: TabBarIndicatorSize.tab,
@@ -38,8 +37,8 @@ class _MainTabbarPageState extends State<MainTabbarPage> with TickerProviderStat
             physics: AlwaysScrollableScrollPhysics(),
             controller: tabController,
             tabs: [
-              Tab(child: Text("Timeline"),),
-              Tab(child: Text("Dokumenter"),)
+              Tab(child: Text("Timeline", style: appTheme.textTheme.headline3.copyWith(color: Colors.white),),),
+              Tab(child: Text("Dokumenter", style: appTheme.textTheme.headline3.copyWith(color: Colors.white),),)
             ],
           ),
         ),

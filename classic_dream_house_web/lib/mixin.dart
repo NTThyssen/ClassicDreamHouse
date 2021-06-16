@@ -1,5 +1,8 @@
+import 'package:classic_dream_house_web/Screens/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:classic_cream_couse/theme.dart';
+
+import 'Screens/settings.dart';
 mixin BasicMixin<Page extends StatefulWidget> on State<Page> {
   Widget appBar() {
     return AppBar(
@@ -12,6 +15,8 @@ mixin BasicMixin<Page extends StatefulWidget> on State<Page> {
   //build
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: fab(),
       extendBody: extendBody(),
       extendBodyBehindAppBar: extendBehindAppBar(),
       appBar: appBar(),
@@ -34,10 +39,12 @@ mixin BasicMixin<Page extends StatefulWidget> on State<Page> {
                     child: Wrap(
                       spacing: 10,
                       children: [
-                        TextButton(child:Text("Hjem", style: headerTextStyle),  onPressed: () {  },),
-                        TextButton(child:Text("Oversigt", style: headerTextStyle),  onPressed: () {  },),
-                        TextButton(child:Text("Indstillinger", style: headerTextStyle),
-                          onPressed: () {  },),
+                        TextButton(child:Text("Hjem", style: headerTextStyle),  onPressed: () {
+                          Navigator.pushReplacementNamed(context, HomeScreen.route);
+                        },),
+                        TextButton(child:Text("Indstillinger", style: headerTextStyle),  onPressed: () {
+                          Navigator.pushReplacementNamed(context, Settings.route);
+                        },),
                       ],
                     ),
                   ),
@@ -60,6 +67,8 @@ mixin BasicMixin<Page extends StatefulWidget> on State<Page> {
   bool hasTopBar() => true;
 
   bool extendBehindAppBar() => false;
+
+  Widget fab() => null;
 
   Widget bottomNavigationBar() => null;
 

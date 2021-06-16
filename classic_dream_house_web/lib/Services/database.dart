@@ -21,7 +21,12 @@ class DatabaseService {
 
   List<BuildingProject> _projectListFromSnapshot(QuerySnapshot snapshot) {
     return snapshot.docs.map((doc) {
-      return BuildingProject.fromJson(doc.data());}).toList();
+      var projects = BuildingProject.fromJson(doc.data());
+      projects.projectuuId = doc.id;
+      return projects;
+    }).toList();
+
+
   }
 
   Stream<List<BuildingProject>> get getProjects  {
@@ -30,11 +35,14 @@ class DatabaseService {
   }
 
 
-  
+  Future deleteProject(BuildingProject buildingProject) async {
+
+    return await projectCollection.doc(buildingProject.projectuuId).delete();
+
+  }
 
   Future updateProject(BuildingProject buildingProject) async {
-
-    return await projectCollection.doc(uid).update(
+    return await projectCollection.doc(buildingProject.projectuuId).update(
         buildingProject.toJson()
     );
 

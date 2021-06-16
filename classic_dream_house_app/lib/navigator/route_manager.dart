@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 
 
 import '../main.dart';
-import '../screens/PdfViewPage.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -11,12 +10,6 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) {
           return MyApp();
-        },
-      );
-    case PdfViewRoute:
-      return MaterialPageRoute(
-        builder: (context) {
-          return PdfViewPage();
         },
       );
     case MainTabbarPageRoute:

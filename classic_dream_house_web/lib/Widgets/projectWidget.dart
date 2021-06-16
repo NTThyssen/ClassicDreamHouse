@@ -31,97 +31,102 @@ class _ProjectWidgetState extends State<ProjectWidget> {
       borderOnForeground: true,
       color: Colors.white,
       elevation: 50,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Hero(
-          tag: widget?.buildingProject?.projectuuId ?? cnt++,
-          child: Container(
-              width: 400,
-              height: 300,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  colorFilter: new ColorFilter.mode(Colors.transparent.withOpacity(1), BlendMode.dstATop),
-                  image: AssetImage("images/funkHouse.jpg"),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(),
-                  SizedBox(
-                    height: 80,
-                    width: 80,
-                    child: Stack(
-                      children: [
-                        SizedBox(
-                          height: 80,
-                          width: 80,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 8,
-                            backgroundColor: appTheme.accentColor,
-                            valueColor: new AlwaysStoppedAnimation<Color>(appTheme.primaryColor),
-                            value: getCompletedTasks(widget.buildingProject),
-                          ),
-                        ),
-                        Center(
-                            child: Text("${getCompletedTasks(widget.buildingProject).toStringAsFixed(2) }  %", style: DefaultTextStyle.of(context).style,)
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.92),
-                        borderRadius: BorderRadius.only(
-                            topLeft:  const  Radius.circular(10.0),
-                            topRight: const  Radius.circular(10.0))
-                    ),
-                    width: 400,
-                    height: 100,
-                    child:  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                              padding: const EdgeInsets.all(16.0),
-                              child: Text("Navn: " + widget.buildingProject.customer.name, style: bodyTextStyle,),
-                            ),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text("Email : " +  widget.buildingProject.customer.email, style: bodyTextStyle,),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text("Mobil: " + widget.buildingProject.customer.mobile,style:bodyTextStyle,),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Text("Bygge adresse: " +widget.buildingProject.customer.buildingAddress , style:bodyTextStyle,),
-                              ),
-                          ],
-                          ),
-                        ),
+      child: Stack(
+        children: [
 
-                      ],
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Hero(
+              tag: widget?.buildingProject?.projectuuId ?? cnt++,
+              child: Container(
+                  width: 400,
+                  height: 300,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      colorFilter: new ColorFilter.mode(Colors.transparent.withOpacity(1), BlendMode.dstATop),
+                      image: AssetImage("images/funkHouse.jpg"),
+                      fit: BoxFit.cover,
                     ),
                   ),
-                ],
-              )
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(),
+                      SizedBox(
+                        height: 80,
+                        width: 80,
+                        child: Stack(
+                          children: [
+                            SizedBox(
+                              height: 80,
+                              width: 80,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 8,
+                                backgroundColor: appTheme.accentColor,
+                                valueColor: new AlwaysStoppedAnimation<Color>(appTheme.primaryColor),
+                                value: getCompletedTasks(widget.buildingProject),
+                              ),
+                            ),
+                            Center(
+                                child: Text("${getCompletedTasks(widget.buildingProject).toStringAsFixed(2) }  %", style: DefaultTextStyle.of(context).style,)
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.92),
+                            borderRadius: BorderRadius.only(
+                                topLeft:  const  Radius.circular(10.0),
+                                topRight: const  Radius.circular(10.0))
+                        ),
+                        width: 400,
+                        height: 100,
+                        child:  Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text("Navn: " + widget.buildingProject.customer.name, style: bodyTextStyle,),
+                                ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Email : " +  widget.buildingProject.customer.email, style: bodyTextStyle,),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Mobil: " + widget.buildingProject.customer.mobile,style:bodyTextStyle,),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text("Bygge adresse: " +widget.buildingProject.customer.buildingAddress , style:bodyTextStyle,),
+                                  ),
+                              ],
+                              ),
+                            ),
+
+                          ],
+                        ),
+                      ),
+                    ],
+                  )
+                ),
             ),
-        ),
+          ),
+        ],
       ),
     );
   }

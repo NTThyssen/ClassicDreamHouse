@@ -13,8 +13,11 @@ class PdfCard extends StatefulWidget {
 class _PdfCardState extends State<PdfCard> {
   PDFDocument document;
   bool _isLoading = true;
+  DefaultCacheManager defaultCacheManager = new DefaultCacheManager();
   loadDocument() async {
-    document = await PDFDocument.fromAsset('images/sample.pdf');
+
+    document =  await  PDFDocument.fromURL("https://www.clickdimensions.com/links/TestPDFfile.pdf",cacheManager: DefaultCacheManager());
+   //document = await PDFDocument.fromAsset('images/sample.pdf');
     setState(() => _isLoading = false);
   }
   @override
@@ -25,7 +28,8 @@ class _PdfCardState extends State<PdfCard> {
   }
   @override
   Widget build(BuildContext context) {
-    return _isLoading ? Container(child: CircularProgressIndicator(),) : GestureDetector(
+    return _isLoading ? Container(child: CircularProgressIndicator(),) :
+    GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, router.PdfViewRoute);
 
@@ -37,10 +41,7 @@ class _PdfCardState extends State<PdfCard> {
               child: Column(
                 children: [
                   Text(widget.pdfTitle, style: TextStyle(color: appTheme.primaryColor),),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Icon(Icons.picture_as_pdf, color: appTheme.primaryColor, size: 100,)
+                  Expanded(child: PDFViewer(document: document, zoomSteps: -1, showPicker: false, showIndicator: false, showNavigation: false, lazyLoad: true, ))
                 ],
               )
           ),

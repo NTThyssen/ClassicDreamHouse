@@ -15,7 +15,8 @@ class InputField extends StatefulWidget {
   final String labelText;
   final String initialValue;
   final Key inputKey;
-  InputField({this.controller, this.labelText, this.initialValue, this.inputKey});
+  final bool isPassword;
+  InputField({this.controller, this.labelText, this.initialValue, this.inputKey, this.isPassword});
 
   @override
   _InputFieldState createState() => _InputFieldState();
@@ -41,6 +42,7 @@ class _InputFieldState extends State<InputField> {
         key: widget.inputKey,
         controller: widget.controller,
         autofocus: true,
+        obscureText: widget.isPassword ?? false,
         decoration: InputDecoration(
             enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: appTheme.primaryColor, width: 2)),
             enabled: true,
