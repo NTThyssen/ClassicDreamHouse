@@ -1,5 +1,6 @@
 import 'package:advance_pdf_viewer/advance_pdf_viewer.dart';
 import 'package:classic_cream_couse/theme.dart';
+import 'package:classic_dream_house_app/screens/PdfViewPage.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:classic_dream_house_app/navigator/route_manager.dart' as router;
@@ -31,7 +32,8 @@ class _PdfCardState extends State<PdfCard> {
     return _isLoading ? Container(child: CircularProgressIndicator(),) :
     GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, router.PdfViewRoute);
+        Navigator.push(
+            context, MaterialPageRoute(builder: (context) => PdfViewPage(pdfDocument: document)) );
 
       },
       child: Container(

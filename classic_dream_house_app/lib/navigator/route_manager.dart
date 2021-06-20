@@ -1,3 +1,4 @@
+import 'package:classic_dream_house_app/screens/PdfViewPage.dart';
 import 'package:classic_dream_house_app/screens/mainTabbarPage.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,12 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) {
           return MainTabbarPage();
+        },
+      );
+    case PdfViewRoute:
+      return MaterialPageRoute(
+        builder: (context) {
+          return PdfViewPage();
         },
       );
     default:

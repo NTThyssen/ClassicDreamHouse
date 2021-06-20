@@ -271,7 +271,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                                                 children: <Widget>[
                                                   Padding(
                                                     padding: EdgeInsets.all(8.0),
-                                                    child: InputField(inputKey: Key("inputTimeline"), labelText: "Category",controller: timelineInitController,),
+                                                    child: FractionallySizedBox(
+                                                        child: InputField(inputKey: Key("inputTimeline"), labelText: "Category",controller: timelineInitController,)),
                                                   ),
                                                   Padding(
                                                       padding: const EdgeInsets.all(8.0),

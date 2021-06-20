@@ -34,21 +34,24 @@ class _InputFieldState extends State<InputField> {
   }
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width*0.15,
-      color: appTheme.backgroundColor,
-      child: TextFormField(
-        validator: (input) => InputFieldValidator.validate(input),
-        key: widget.inputKey,
-        controller: widget.controller,
-        autofocus: true,
-        obscureText: widget.isPassword ?? false,
-        decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: appTheme.primaryColor, width: 2)),
-            enabled: true,
-            border: OutlineInputBorder(),
-            labelText: widget.labelText,
-            labelStyle: bodyTextStyle.copyWith(fontSize: 18)
+    return FractionallySizedBox(
+      widthFactor: 0.80,
+      child: Container(
+
+        color: appTheme.backgroundColor,
+        child: TextFormField(
+          validator: (input) => InputFieldValidator.validate(input),
+          key: widget.inputKey,
+          controller: widget.controller,
+          autofocus: true,
+          obscureText: widget.isPassword ?? false,
+          decoration: InputDecoration(
+              enabledBorder: OutlineInputBorder(borderSide: BorderSide(color: appTheme.primaryColor, width: 2)),
+              enabled: true,
+              border: OutlineInputBorder(),
+              labelText: widget.labelText,
+              labelStyle: bodyTextStyle.copyWith(fontSize: 18)
+          ),
         ),
       ),
     );
