@@ -99,12 +99,7 @@ class _LoginPageState extends State<LoginPage> {
                               icon: Icon(Icons.help, color: appTheme.primaryColor, size:  30,),
                               iconCupertino: Icon(Icons.help, color: appTheme.primaryColor, size: 30,),
                               onPressed: () async {
-                                return await showOkAlertDialog(
-                                    context: context,
-                                    title: 'Title',
-                                    message: "Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App en. Ellers kontakt os om ID",
-                                );
-                                showDialog(
+                                return await showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
                                   return AdaptiveAlertDialog(
