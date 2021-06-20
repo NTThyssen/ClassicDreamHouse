@@ -20,6 +20,7 @@ jobs:
       - run: flutter pub get
       - run: |
           cd classic_dream_house_app
+          flutter clean
           flutter pub get
           flutter build apk --release
       #    flutter build ios --no-codesign
