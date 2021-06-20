@@ -18,10 +18,10 @@ jobs:
         with:
           flutter-version: '2.0.1'
       - run: flutter pub get
-      #- run: |
-      #    cd classic_dream_house_app
-      #    flutter pub get
-      #    flutter build apk --release
+      - run: |
+          cd classic_dream_house_app
+          flutter pub get
+          flutter build apk --release
       #    flutter build ios --no-codesign
       #    cd build/ios/iphoneos
       #   mkdir Payload
