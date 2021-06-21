@@ -102,15 +102,19 @@ class _LoginPageState extends State<LoginPage> {
                                 return await showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return AdaptiveAlertDialog(
-                                    title: Center(child: Text("Info", style: appTheme.textTheme.headline2.copyWith(color: appTheme.primaryColor),)),
-                                    content: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",style: appTheme.textTheme.bodyText1.copyWith(color:appTheme.primaryColor, fontSize: 16),),
-                                    actions: [
-                                      AdaptiveAlertDialogButton(
-                                          closeOnPress: true,
-                                          child: Text("Ok"),
-                                          onPressed: null)
-                                    ],
+                                  return Container(
+                                    width: 150,
+                                    height: 250,
+                                    child: AdaptiveAlertDialog(
+                                      title: Center(child: Text("Info", style: appTheme.textTheme.headline2.copyWith(color: appTheme.primaryColor),)),
+                                      content: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",style: appTheme.textTheme.bodyText1.copyWith(color:appTheme.primaryColor, fontSize: 16),),
+                                      actions: [
+                                        AdaptiveAlertDialogButton(
+                                            closeOnPress: true,
+                                            child: Text("Ok"),
+                                            onPressed: null)
+                                      ],
+                                    ),
                                   );
                                 }
                             );
