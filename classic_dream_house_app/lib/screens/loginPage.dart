@@ -101,7 +101,6 @@ class _LoginPageState extends State<LoginPage> {
                               icon: Icon(Icons.help, color: appTheme.primaryColor, size:  30,),
                               iconCupertino: Icon(Icons.help, color: appTheme.primaryColor, size: 30,),
                               onPressed: () async {
-                                await showOkAlertDialog(context: context, alertStyle: );
                                   await showAlertDialog(
                                       context: context,
                                       title: "Info",
