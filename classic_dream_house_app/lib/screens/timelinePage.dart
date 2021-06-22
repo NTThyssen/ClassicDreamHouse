@@ -23,8 +23,36 @@ class _TimelinePageState extends State<TimelinePage> {
             child: ListView.builder(
               itemCount: snapshot.data.timeLineData.length,
               itemBuilder: (context, index) =>
-                  FadeIn(animCounter++, Timeline(title: snapshot.data.timeLineData[index].title, timelineData: snapshot.data.timeLineData[index],
-                    isLast:  index+1 == snapshot.data.timeLineData.length,)),
+                  GestureDetector(
+                    onTap: () async {
+                      return await showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: Container(width: 50, height: 50,child: Center(child: Text("Info",))),
+                              content: Container(
+                                  height: 80,
+                                  width: 250,
+                                  child: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",)),
+                              actions: [
+                                Container(
+                                  constraints: BoxConstraints(maxWidth: 95, maxHeight: 40),
+                                  child: FlatButton(
+                                      child: Text("Ok"),
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      }),
+                                  width: 120,
+                                  height: 40,
+                                )
+                              ],
+                            );
+                          }
+                      );
+                    },
+                    child: FadeIn(animCounter++, Timeline(title: snapshot.data.timeLineData[index].title, timelineData: snapshot.data.timeLineData[index],
+                      isLast:  index+1 == snapshot.data.timeLineData.length,)),
+                  ),
             ),
           ) : Container();
         }
