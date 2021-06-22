@@ -105,10 +105,14 @@ class _LoginPageState extends State<LoginPage> {
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
-                                          title: Center(child: Text("Info", style: appTheme.textTheme.headline2.copyWith(color: appTheme.primaryColor),)),
-                                          content: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",style: appTheme.textTheme.bodyText1.copyWith(color:appTheme.primaryColor, fontSize: 16),),
+                                          title: Container(width: 50, height: 50,child: Center(child: Text("Info", style: appTheme.textTheme.headline2.copyWith(color: appTheme.primaryColor),))),
+                                          content: Container(
+                                            height: 80,
+                                              width: 250,
+                                              child: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",style: appTheme.textTheme.bodyText1.copyWith(color:appTheme.primaryColor, fontSize: 16),)),
                                           actions: [
                                             Container(
+                                              constraints: BoxConstraints(maxWidth: 95, maxHeight: 40),
                                               child: AdaptiveAlertDialogButton(
                                                   closeOnPress: true,
                                                   child: Text("Ok"),
