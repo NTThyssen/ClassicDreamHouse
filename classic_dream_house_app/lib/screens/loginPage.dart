@@ -100,8 +100,8 @@ class _LoginPageState extends State<LoginPage> {
                             child: AdaptiveIconButton(
                               icon: Icon(Icons.help, color: appTheme.primaryColor, size:  30,),
                               iconCupertino: Icon(Icons.help, color: appTheme.primaryColor, size: 30,),
-                              onPressed: () {
-                                  return showDialog(
+                              onPressed: () async {
+                                  return await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
                                         return AlertDialog(
@@ -113,10 +113,11 @@ class _LoginPageState extends State<LoginPage> {
                                           actions: [
                                             Container(
                                               constraints: BoxConstraints(maxWidth: 95, maxHeight: 40),
-                                              child: AdaptiveAlertDialogButton(
-                                                  closeOnPress: true,
+                                              child: FlatButton(
                                                   child: Text("Ok"),
-                                                  onPressed: null),
+                                                  onPressed: () {
+                                                    Navigator.pop(context);
+                                                  }),
                                               width: 120,
                                               height: 40,
                                             )
@@ -124,8 +125,6 @@ class _LoginPageState extends State<LoginPage> {
                                         );
                                       }
                                   );
-
-
 
                           },
                         )),
