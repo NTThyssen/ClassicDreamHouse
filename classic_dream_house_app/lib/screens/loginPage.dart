@@ -4,7 +4,6 @@ import 'package:classic_dream_house_app/navigator/route_manager.dart';
 import 'package:classic_dream_house_app/screens/mainTabbarPage.dart';
 import 'package:classic_dream_house_app/services/database.dart';
 import 'package:classic_dream_house_app/services/sharedPreferences.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_library/adaptive_library.dart';
 import 'package:adaptive_dialog/adaptive_dialog.dart';
@@ -102,43 +101,25 @@ class _LoginPageState extends State<LoginPage> {
                               icon: Icon(Icons.help, color: appTheme.primaryColor, size:  30,),
                               iconCupertino: Icon(Icons.help, color: appTheme.primaryColor, size: 30,),
                               onPressed: () {
-                                if (Platform.isAndroid) {
                                   return showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return Container(
-                                          child: AlertDialog(
-                                            title: Center(child: Text("Info", style: appTheme.textTheme.headline2.copyWith(color: appTheme.primaryColor),)),
-                                            content: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",style: appTheme.textTheme.bodyText1.copyWith(color:appTheme.primaryColor, fontSize: 16),),
-                                            actions: [
-                                              AdaptiveAlertDialogButton(
+                                        return AlertDialog(
+                                          title: Center(child: Text("Info", style: appTheme.textTheme.headline2.copyWith(color: appTheme.primaryColor),)),
+                                          content: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",style: appTheme.textTheme.bodyText1.copyWith(color:appTheme.primaryColor, fontSize: 16),),
+                                          actions: [
+                                            Container(
+                                              child: AdaptiveAlertDialogButton(
                                                   closeOnPress: true,
                                                   child: Text("Ok"),
-                                                  onPressed: null)
-                                            ],
-                                          ),
+                                                  onPressed: null),
+                                              width: 120,
+                                              height: 40,
+                                            )
+                                          ],
                                         );
                                       }
                                   );
-                                } else if (Platform.isIOS) {
-                                  return showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          child: CupertinoAlertDialog(
-                                            title: Center(child: Text("Info", style: appTheme.textTheme.headline2.copyWith(color: appTheme.primaryColor),)),
-                                            content: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",style: appTheme.textTheme.bodyText1.copyWith(color:appTheme.primaryColor, fontSize: 16),),
-                                            actions: [
-                                              AdaptiveAlertDialogButton(
-                                                  closeOnPress: true,
-                                                  child: Text("Ok"),
-                                                  onPressed: null)
-                                            ],
-                                          ),
-                                        );
-                                      }
-                                  );
-                                }
 
 
 
