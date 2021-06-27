@@ -4,21 +4,20 @@ import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:supercharged/supercharged.dart';
 class TimelinePage extends StatefulWidget {
+  final String uuid;
+  TimelinePage({this.uuid});
   @override
   _TimelinePageState createState() => _TimelinePageState();
 }
 
 class _TimelinePageState extends State<TimelinePage> {
+
   double animCounter = 0.5;
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-        future: DatabaseService().getProject("lADNY08fzV1PCgTO3x5L"),
+    return StreamBuilder(
+        stream: DatabaseService().projectStream(widget.uuid),
         builder: (context, snapshot)      {
-          if(snapshot.hasData){
-            print(snapshot.data.projectuuId);
-            print(snapshot.data.timeLineData[0].status);
-          }
           return snapshot.hasData ? Container(
             child: ListView.builder(
               itemCount: snapshot.data.timeLineData.length,

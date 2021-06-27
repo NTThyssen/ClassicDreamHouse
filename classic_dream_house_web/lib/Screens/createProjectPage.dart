@@ -1,11 +1,11 @@
-import 'dart:html';
+import 'dart:html' as html;
+import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:image_picker_web/image_picker_web.dart';
-import 'package:mime_type/mime_type.dart';
-import 'package:universal_html/src/html.dart' as html;
 import 'package:cool_alert/cool_alert.dart';
 import 'package:classic_dream_house_web/Widgets/documentUploadWidget.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:mime_type/mime_type.dart';
 import 'package:path/path.dart' as p;
 import 'package:classic_cream_couse/Model/buildingProject.dart';
 import 'package:classic_cream_couse/Model/customer.dart';
@@ -19,7 +19,9 @@ import 'package:classic_cream_couse/shared_widgets/mainButtonType.dart';
 import 'package:classic_cream_couse/Model/status.dart';
 import 'package:firebase/firebase.dart' as fb;
 import 'package:classic_cream_couse/Model/timelineData.dart';
+import 'package:classic_cream_couse/Model/documents.dart';
 import 'package:path/path.dart' as path;
+import 'package:universal_io/io.dart';
 
 class CreateProjectPage extends StatefulWidget {
   static const String route = '/createProject';
@@ -33,11 +35,19 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
 
   List<dynamic> timelineElements = [];
   List<TimelineData> timelineDataList = [];
+  List<Documents> documents = [];
+  List<dynamic> documentsElements = [];
+
+  addToPDF(Widget widget){
+    documentsElements.length == 0 ? documentsElements.add(widget) : documentsElements.insert(documentsElements.length , Center(child: widget));
+
+  }
+
   addToTimeline(Widget widget){
     timelineElements.length == 0 ? timelineElements.add(widget) : timelineElements.insert(timelineElements.length , Center(child: widget));
 
   }
-
+  TextEditingController documentController = TextEditingController();
  TextEditingController nameController= TextEditingController();
  TextEditingController partnerNameController = TextEditingController();
  TextEditingController mailController = TextEditingController();
@@ -45,6 +55,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
  TextEditingController buildingAddressController = TextEditingController();
  TextEditingController livingAddressController = TextEditingController();
   TextEditingController timelineInitController = TextEditingController();
+  var documentName;
  final _formKey = GlobalKey<FormState>();
  void populateProject(BuildingProject buildingProject){
    nameController.text = buildingProject.customer.name;
@@ -57,6 +68,9 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
      timelineDataList.add(elements);
      addToTimeline(TimelineInputWidget(timelineData: elements,));
    }
+
+   documentsElements.add(DocumentUploadWidget());
+
  }
 
 
@@ -75,22 +89,66 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
       timelineDataList.add(temp3);
       addToTimeline(TimelineInputWidget(timelineData: temp2,));
       addToTimeline(TimelineInputWidget(timelineData: temp3,));
-    }
+
+      Documents temppdf = Documents(title: "Tilføj Titel", uri: "");
+      documents.add(temppdf);
+      addToTimeline(DocumentUploadWidget(text: temppdf.title));
 
     }
 
+    }
 
+
+    pickFile() async{
+      String fileName;
+      var picked = await FilePicker.platform.pickFiles(allowMultiple: true, );
+      var uri;
+      if (picked != null) {
+        Uint8List fileBytes = picked.files.first.bytes;
+         fileName = picked.files.first.name;
+        uri = await uploadToFirebase(fileBytes, fileName);
+      }
+      documents.add(Documents(title: fileName, uri: uri.toString() ));
+    return fileName;
+    }
+
+// In your screen (stateful) widget
+
+// Before your build method, create an UploadTask instance
   fb.UploadTask _uploadTask;
-//method to load image and update `uploadedImage`
-  uploadPDFToFirebase(File pdf) async {
-    final filePath = 'pdf/${p.basename(pdf.name)}';
-    setState(()  {
+
+  /// Upload file to firebase storage and updates [_uploadTask] to the latest
+  /// file upload
+ Future<Uri> uploadToFirebase(Uint8List imageFile, String filename) async {
+    final filePath = 'images/${filename}';
+    setState(() {
       _uploadTask = fb
           .storage()
-          .refFromURL("gs://classic-dream-house.appspot.com")
+          .refFromURL('gs://classic-dream-house.appspot.com')
           .child(filePath)
-          .put(pdf);
+          .put(imageFile);
     });
+    var downloadurl = await _uploadTask.snapshot.ref.getDownloadURL();
+   return downloadurl;
+  }
+
+
+//method to load image and update `uploadedImage`
+  uploadPDFToFirebase(html.File pdf) async {
+    var url;
+    try {
+      //Upload Profile Photo
+      fb.UploadTask _uploadTask =   fb.storage().refFromURL("gs://classic-dream-house.appspot.com").child('images/${pdf.name}').put(pdf);
+      _uploadTask.future.then((res) {
+       url = res.ref.getDownloadURL();
+      });
+
+    } catch (e) {
+      print(e.code);
+    }
+    return url;
+
+
 
   }
   Future<Uri> uploadImageFile(html.File file,
@@ -103,16 +161,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
     return imageUri;
   }
 
-  uploadImageToFirebase(File imageFile) async {
-    final filePath = 'images/${p.basename(imageFile.name)}';
-    setState(()  {
-      _uploadTask = fb
-          .storage()
-          .refFromURL("gs://classic-dream-house.appspot.com")
-          .child(filePath)
-          .put(imageFile);
-    });
-  }
 
   /// A "select file/folder" window will appear. User will have to choose a file.
   /// This file will be then read, and uploaded to firebase storage;
@@ -187,9 +235,8 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                         children: [
                           GestureDetector(
                             onTap: () async {
-                              var file = await FilePicker.platform.pickFiles(allowMultiple: true);
-                              //print(file.);
-                            // await uploadImageFile();
+                              await pickFile();
+
 
                             },
                             child: Container(
@@ -217,12 +264,79 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                     ),
                   ),
                   Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 0, 150, 0),
-                      child: Column(
-                        children: [
-                          DocumentUploadWidget(),
-                        ],
+                    child: Container(
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(0, 0, 150, 0),
+                        child: Column(
+                          children: [
+                            Expanded(
+                              child: ListView.builder(
+                                  itemCount: documentsElements.length == 0 ? 1 : documentsElements.length ,
+                                  itemBuilder: (_, index) {
+                                   return documentsElements[index];
+
+                                  }
+                              ),
+                            ),
+                            IconButton(
+                              iconSize: 60,
+                              key: Key("timelineBtn"),
+                              icon: Icon(Icons.add_circle, color: appTheme.primaryColor, size: 60,),
+                              onPressed: ()  {
+                                 showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        content: Stack(
+                                          overflow: Overflow.visible,
+                                          children: <Widget>[
+                                            Form(
+                                              key: _formKey,
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: MainButtonType(
+                                                        btnKey: Key("addDocument"),
+                                                        buttonText:"Tilføj Dokument",
+                                                        onClick: () async {
+                                                          documentController.text= await pickFile();
+                                                          setState(() {
+                                                            Documents temppdf = Documents(title: documentController.text, uri: "");
+                                                            documents.add(temppdf);
+                                                            addToPDF( DocumentUploadWidget(text:documentController.text ,));
+                                                          });
+                                                          Navigator.of(context).pop();
+                                                        },
+                                                      )
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Positioned(
+                                              right: -40.0,
+                                              top: -40.0,
+                                              child: InkResponse(
+                                                radius: 20,
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 20,
+                                                  child: Icon(Icons.close),
+                                                  backgroundColor: Colors.red,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    });
+                              },
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -251,19 +365,6 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                                         content: Stack(
                                           overflow: Overflow.visible,
                                           children: <Widget>[
-                                            Positioned(
-                                              right: -40.0,
-                                              top: -40.0,
-                                              child: InkResponse(
-                                                onTap: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: CircleAvatar(
-                                                  child: Icon(Icons.close),
-                                                  backgroundColor: Colors.red,
-                                                ),
-                                              ),
-                                            ),
                                             Form(
                                               key: _formKey,
                                               child: Column(
@@ -290,6 +391,21 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                                                       )
                                                   ),
                                                 ],
+                                              ),
+                                            ),
+                                            Positioned(
+                                              right: -40.0,
+                                              top: -40.0,
+                                              child: InkResponse(
+                                                radius: 20,
+                                                onTap: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                                child: CircleAvatar(
+                                                  radius: 20,
+                                                  child: Icon(Icons.close),
+                                                  backgroundColor: Colors.red,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -387,6 +503,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                       BuildingProject(
                           projectuuId: widget.buildingProject.projectuuId,
                           timeLineData: timelineDataList,
+                          documents: documents,
                           customer: Customer(
                             name:nameController.text,
                             partnerName: partnerNameController.text,

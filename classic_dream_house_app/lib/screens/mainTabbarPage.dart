@@ -5,6 +5,8 @@ import 'package:classic_dream_house_app/widgets/timeline.dart';
 import 'package:flutter/material.dart';
 
 class MainTabbarPage extends StatefulWidget {
+  final String uuid;
+  MainTabbarPage({this.uuid});
   @override
   _MainTabbarPageState createState() => _MainTabbarPageState();
 }
@@ -15,7 +17,6 @@ class _MainTabbarPageState extends State<MainTabbarPage> with TickerProviderStat
   @override
   void initState() {
     super.initState();
-
     tabController = TabController(length: 2, vsync: this,);
   }
 
@@ -57,7 +58,7 @@ class _MainTabbarPageState extends State<MainTabbarPage> with TickerProviderStat
                 ),
                 TabBarView(
                   controller: tabController,
-                  children: [TimelinePage(), DocumentsPage()],
+                  children: [TimelinePage(uuid: widget.uuid,), DocumentsPage()],
                 )
               ]
           )

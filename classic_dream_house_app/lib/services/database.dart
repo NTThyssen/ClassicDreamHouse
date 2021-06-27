@@ -12,8 +12,7 @@ class DatabaseService {
 
   Stream<BuildingProject> projectStream(String doc){
     return projectCollection.doc(doc).snapshots().map((snap) {
-      print(BuildingProject.fromJson(snap.data as Map<String, dynamic>));
-      return BuildingProject.fromJson(snap.data as Map<String, dynamic>); });
+      return BuildingProject.fromJson(snap.data()); });
   }
 
   Future<BuildingProject> getProject(String projectUuid) async {

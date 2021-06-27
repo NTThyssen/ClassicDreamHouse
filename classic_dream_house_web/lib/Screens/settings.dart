@@ -18,7 +18,7 @@ class _SettingsState extends State<Settings> with BasicMixin {
     return Container(
       width: MediaQuery.of(context).size.width*0.60,
       child: ListView.builder(
-          itemCount: 5,
+          itemCount: 1,
           itemBuilder: (_, index) {
             return  Container(
               width: 800,
@@ -29,7 +29,7 @@ class _SettingsState extends State<Settings> with BasicMixin {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      InputField(labelText: "email",controller: username,),
+                      InputField(labelText: "email",controller: username, inputKey: Key('1'), ),
                       InputField(labelText: "Password",controller: password, isPassword: true,),
                       MainButtonType(
                         buttonText:"Opret Bruger",
@@ -42,7 +42,6 @@ class _SettingsState extends State<Settings> with BasicMixin {
                 ),
               ),
             );
-
           }
       ),
     );
