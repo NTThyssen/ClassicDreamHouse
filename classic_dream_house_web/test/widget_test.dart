@@ -5,26 +5,29 @@
 // gestures. You can also use WidgetTester to find child widgets in the widget
 // tree, read text, and verify that the values of widget properties are correct.
 
+import 'package:classic_cream_couse/shared_widgets/mainButtonType.dart';
+import 'package:classic_dream_house_web/Screens/createProjectPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:classic_dream_house_web/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Timeline Timeline Element', (WidgetTester tester) async {
+
+    final timelineBtn = find.byKey(ValueKey("timelineBtn"));
+    final addTimelineBtn = find.byKey(ValueKey("addTimelineKey"));
+
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
-
+    await tester.pumpWidget(MaterialApp(home: CreateProjectPage()));
+    await tester.tap(timelineBtn);
     // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
     await tester.pump();
+    expect(find.text("Tilføj til tidslinje"), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await tester.enterText(find.byKey(ValueKey("inputTimeline")), "Fundament");
+    await tester.tap(addTimelineBtn);
+
+    expect(find.text("Fundament"), findsOneWidget);
   });
 }

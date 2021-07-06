@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.classic_dream_house_app">
+    package="com.cdh.classic_dream_house_app">
    <application
-        android:label="classic_dream_house_app"
+        android:label="Classic Dream House"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

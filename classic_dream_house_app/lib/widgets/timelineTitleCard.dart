@@ -14,6 +14,7 @@ class _TimelineTitleCardState extends State<TimelineTitleCard> {
     return Container(
       height: 50,
       child: Card(
+        elevation: 5,
         child: Center(
             child: Text(widget.title, style: TextStyle(color: appTheme.primaryColor, fontSize: 18),
             )
