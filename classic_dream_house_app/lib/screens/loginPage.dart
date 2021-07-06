@@ -7,8 +7,6 @@ import 'package:classic_dream_house_app/services/sharedPreferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:adaptive_library/adaptive_library.dart';
-import 'package:adaptive_dialog/adaptive_dialog.dart';
-import 'package:flutter/scheduler.dart';
 import 'dart:io' show Platform;
 class LoginPage extends StatefulWidget {
   @override
@@ -17,12 +15,13 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   String input;
-
-
+  final _text = TextEditingController();
+  bool _validate = false;
+  String errorMsg="Feltet må ikke være tomt";
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: SharedPref().read("idd"),
+        future: SharedPref().read("id"),
         builder: (context, snapshot) {
           return snapshot.data == null ?
               Container(
@@ -53,6 +52,7 @@ class _LoginPageState extends State<LoginPage> {
                                   .width * 0.60,
                               color: appTheme.backgroundColor,
                               child: TextField(
+                                controller: _text,
                                 onChanged: (textInput) {
                                   input = textInput;
                                 },
@@ -60,6 +60,7 @@ class _LoginPageState extends State<LoginPage> {
                                     enabled: true,
                                     border: OutlineInputBorder(),
                                     labelText: "Bruger-ID",
+                                    errorText: _validate ? errorMsg : null,
                                     labelStyle: TextStyle(
                                         fontSize: 22
                                     )
@@ -80,17 +81,38 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                               child: Text("Login"),
                               onPressed: () async {
-                               var res = await  DatabaseService().getProject(input);
-                               if(res != null){
-                                 await SharedPref().save("idd",
-                                     res.projectuuId ?? "saved id");
-                                 Navigator.pushReplacement(
-                                     context,MaterialPageRoute(
-                                   builder: (context) {
-                                     return MainTabbarPage(uuid:res.projectuuId);
-                                   },
-                                 ));
-                              }
+                                _text.text.isEmpty ? _validate = true : _validate = false;
+                                print(_validate);
+                                var res;
+                                if(!_validate){
+                                  try{
+                                    res = await  DatabaseService().getProject(input) ;
+                                  }catch(e){
+                                    print(e);
+                                    res = null;
+                                  }
+
+                                  if(res != null){
+                                    await SharedPref().save("id",
+                                        res.projectuuId ?? "saved id");
+                                    Navigator.pushReplacement(
+                                        context,MaterialPageRoute(
+                                      builder: (context) {
+                                        return MainTabbarPage(uuid:res.projectuuId);
+                                      },
+                                    ));
+                                  }else{
+                                    _text.text.isEmpty  ? errorMsg = "Feltet må ikke være tomt" : errorMsg="Ikke korrekt ID";
+                                    _validate = true;
+                                    setState(() {
+
+                                    });
+                                  }
+                                }
+                                setState(() {
+
+                                });
+                                print(_validate);
                               },
                             ),
                           ],
@@ -107,18 +129,17 @@ class _LoginPageState extends State<LoginPage> {
                                   return await showDialog(
                                       context: context,
                                       builder: (BuildContext context) {
-                                        return CupertinoAlertDialog(
+                                        return AlertDialog(
                                           title: Container(width: 50, height: 50,child: Center(child: Text("Info", style: appTheme.textTheme.headline2.copyWith(color: appTheme.primaryColor),))),
                                           content: Container(
                                               child: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",style: appTheme.textTheme.bodyText1.copyWith(color:appTheme.primaryColor, fontSize: 16),)),
                                           actions: [
-                                            Container(
-                                              child: CupertinoButton(
+                                             FlatButton(
                                                   child: Text("Ok"),
                                                   onPressed: () {
                                                     Navigator.pop(context);
                                                   }),
-                                            )
+
                                           ],
                                         );
                                       }
@@ -130,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
 
-          ) : MainTabbarPage();
+          ) : MainTabbarPage(uuid: snapshot.data ,);
         }
     );
   }

@@ -6,7 +6,8 @@ import 'dart:async';
 import 'package:classic_dream_house_app/navigator/route_manager.dart' as router;
 class PdfCard extends StatefulWidget {
   final String pdfTitle;
-  PdfCard({this.pdfTitle});
+  final String uri;
+  PdfCard({this.pdfTitle, this.uri});
   @override
   _PdfCardState createState() => _PdfCardState();
 }
@@ -17,7 +18,7 @@ class _PdfCardState extends State<PdfCard> {
   DefaultCacheManager defaultCacheManager = new DefaultCacheManager();
   loadDocument() async {
 
-    document =  await  PDFDocument.fromURL("https://www.clickdimensions.com/links/TestPDFfile.pdf",cacheManager: DefaultCacheManager());
+    document =  await  PDFDocument.fromURL(widget.uri,cacheManager: DefaultCacheManager());
    //document = await PDFDocument.fromAsset('images/sample.pdf');
     setState(() => _isLoading = false);
   }

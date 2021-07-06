@@ -32,7 +32,7 @@ class _TimelinePageState extends State<TimelinePage> {
                               content: Container(
                                   height: 80,
                                   width: 250,
-                                  child: Text("Vi skulle gerne have sendt dig mail med et ID, som du skal indtaste i App'en. Ellers kontakt os om ID",)),
+                                  child: Text("Du vil snart kunne se billeder under hver kategori",)),
                               actions: [
                                 Container(
                                   constraints: BoxConstraints(maxWidth: 95, maxHeight: 40),
