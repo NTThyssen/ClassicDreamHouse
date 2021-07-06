@@ -6,8 +6,15 @@ class DatabaseService {
 
   DatabaseService({this.uid});
   final CollectionReference projectCollection = FirebaseFirestore.instance.collection("projects");
+  final CollectionReference userCollection = FirebaseFirestore.instance.collection("users");
 
 
+  Future createUser() async {
+    return await userCollection.doc(uid).update(
+        //buildingProject.toJson()
+    );
+
+  }
 
 
   Stream<BuildingProject> projectStream(String doc){

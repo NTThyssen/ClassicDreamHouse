@@ -1,5 +1,8 @@
 import 'package:classic_dream_house_web/Screens/homeScreen.dart';
+import 'package:classic_dream_house_web/Services/auth.dart';
 import 'package:classic_dream_house_web/mixin.dart';
+import 'package:firebase/firebase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:classic_cream_couse/theme.dart';
 import 'package:classic_cream_couse/shared_widgets/inputField.dart';
@@ -45,7 +48,7 @@ class _LoginPageState extends State<LoginPage> with BasicMixin {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   InputField(labelText: "Username", controller: username,),
-                  InputField(labelText: "Password", controller: password,),
+                  InputField(labelText: "Password", controller: password, isPassword: true,),
 
                   ConstrainedBox(
                     constraints: BoxConstraints.tightFor(width: 150, height: 40),
@@ -60,7 +63,20 @@ class _LoginPageState extends State<LoginPage> with BasicMixin {
                       ),
                       child: Text("Login"),
                       onPressed: () async {
-                        Navigator.pushReplacementNamed(context, HomeScreen.route);
+                        try {
+                          var user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                              email: username.text,
+                              password: password.text
+                          );
+                          if(user.user.email != null){
+                               Navigator.pushReplacementNamed(context, HomeScreen.route);
+                          }
+                          print(user);
+                        } catch (e) {
+                          print(e);
+                        }
+
+
                       },
                     ),
                   ),

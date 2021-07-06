@@ -45,7 +45,7 @@ dependencies:
   universal_io: ^2.0.4
   path: ^1.8.0
   file_picker: ^2.1.0
-  firebase_auth: ^0.6.0
+  firebase_auth: ^0.18.0+1
   cached_network_image: ^2.3.3
   cool_alert: ^1.1.0
 dev_dependencies:

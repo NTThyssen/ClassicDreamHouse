@@ -2,6 +2,7 @@ import 'package:classic_dream_house_web/Screens/homeScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:classic_cream_couse/theme.dart';
 
+import 'Screens/homeScreen.dart';
 import 'Screens/settings.dart';
 mixin BasicMixin<Page extends StatefulWidget> on State<Page> {
   Widget appBar() {

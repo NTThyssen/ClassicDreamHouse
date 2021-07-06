@@ -1,4 +1,6 @@
 import 'package:classic_dream_house_web/mixin.dart';
+import 'package:firebase/firebase.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:classic_cream_couse/theme.dart';
 import 'package:classic_cream_couse/shared_widgets/inputField.dart';
@@ -33,8 +35,15 @@ class _SettingsState extends State<Settings> with BasicMixin {
                       InputField(labelText: "Password",controller: password, isPassword: true,),
                       MainButtonType(
                         buttonText:"Opret Bruger",
-                        onClick: () {
-
+                        onClick: () async {
+                          try {
+                            var userCredential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                                email: username.text,
+                                password: password.text
+                            );
+                          } catch (e) {
+                            print(e);
+                          }
                         },
                       ),
                     ],

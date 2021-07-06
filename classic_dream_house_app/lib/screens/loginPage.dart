@@ -21,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: SharedPref().read("id"),
+        future: SharedPref().read("idd"),
         builder: (context, snapshot) {
           return snapshot.data == null ?
               Container(
@@ -93,7 +93,7 @@ class _LoginPageState extends State<LoginPage> {
                                   }
 
                                   if(res != null){
-                                    await SharedPref().save("id",
+                                    await SharedPref().save("idd",
                                         res.projectuuId ?? "saved id");
                                     Navigator.pushReplacement(
                                         context,MaterialPageRoute(
