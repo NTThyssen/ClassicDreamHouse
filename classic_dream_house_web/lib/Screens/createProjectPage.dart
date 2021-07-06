@@ -176,6 +176,9 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
 
   @override
   Widget body() {
+   for(var doc in widget.buildingProject.documents){
+     documents.add(Documents(title: doc.title, uri: doc.uri.toString() ));
+   }
     print(widget.buildingProject);
     return WillPopScope(
       onWillPop: () async {
@@ -271,7 +274,7 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                           children: [
                             Expanded(
                               child: ListView.builder(
-                                  itemCount: documentsElements.length == 0 ? 1 : documentsElements.length ,
+                                  itemCount: widget.buildingProject.documents.length == 0 ? 1 : widget.buildingProject.documents.length ,
                                   itemBuilder: (_, index) {
                                    return documentsElements[index];
 
@@ -282,57 +285,19 @@ class _CreateProjectPageState extends State<CreateProjectPage> with BasicMixin{
                               iconSize: 60,
                               key: Key("timelineBtn"),
                               icon: Icon(Icons.add_circle, color: appTheme.primaryColor, size: 60,),
-                              onPressed: ()  {
-                                 showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        content: Stack(
-                                          overflow: Overflow.visible,
-                                          children: <Widget>[
-                                            Form(
-                                              key: _formKey,
-                                              child: Column(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: <Widget>[
-                                                  Padding(
-                                                      padding: const EdgeInsets.all(8.0),
-                                                      child: MainButtonType(
-                                                        btnKey: Key("addDocument"),
-                                                        buttonText:"Tilføj Dokument",
-                                                        onClick: () async {
-                                                          documentController.text= await pickFile();
-                                                          setState(() {
-                                                            Documents temppdf = Documents(title: documentController.text, uri: "");
-                                                            documents.add(temppdf);
-                                                            addToPDF( DocumentUploadWidget(text:documentController.text ,));
-                                                          });
-                                                          Navigator.of(context).pop();
-                                                        },
-                                                      )
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Positioned(
-                                              right: -40.0,
-                                              top: -40.0,
-                                              child: InkResponse(
-                                                radius: 20,
-                                                onTap: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: CircleAvatar(
-                                                  radius: 20,
-                                                  child: Icon(Icons.close),
-                                                  backgroundColor: Colors.red,
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      );
-                                    });
+                              onPressed: ()  async {
+
+                                documentController.text= await pickFile();
+                                print(documentController.text);
+                                setState(() {
+                                  Documents temppdf = Documents(
+                                      title: documentController.text, uri: "");
+                                  documents.add(temppdf);
+                                  addToPDF(DocumentUploadWidget(
+                                    text: documentController.text,));
+                                });
+
+
                               },
                             ),
                           ],

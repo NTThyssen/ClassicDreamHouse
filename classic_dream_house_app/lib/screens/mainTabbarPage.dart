@@ -61,7 +61,7 @@ class _MainTabbarPageState extends State<MainTabbarPage> with TickerProviderStat
                       ),
                       TabBarView(
                         controller: tabController,
-                        children: [TimelinePage(uuid: widget.uuid,), DocumentsPage()],
+                        children: [TimelinePage(uuid: widget.uuid,), DocumentsPage(uuid: widget.uuid,)],
                       )
                     ]
                 )
